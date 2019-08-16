@@ -1,0 +1,263 @@
+<style>
+	@media only print {
+		body > *:not(#_aig-container) {
+			display: none;
+		}
+
+		@page {
+			margin: 0;
+		}
+
+		body {
+			background: none;
+		}
+
+		.robot-wrapper {
+			display: none;
+		}
+
+		#_aig-container {
+			margin: 2cm;
+		}
+	}
+
+	@media only screen {
+		#_aig-container {
+			display: none;
+		}
+	}
+
+	.invoice-box {
+		margin: auto;
+		font-size: 16px;
+		line-height: 24px;
+		font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+		color: #555;
+	}
+
+	.invoice-box table {
+		width: 100%;
+		line-height: inherit;
+		text-align: left;
+	}
+
+	.invoice-box table td {
+		padding: 5px;
+		vertical-align: top;
+	}
+
+	.invoice-box table tr.heading td {
+		font-size: 18px;
+		font-weight: bold;
+	}
+
+	.invoice-box table tr table td:first-child {
+		padding-left: 0;
+	}
+
+	.invoice-box table tr table td:last-child {
+		padding-right: 0;
+	}
+
+	.invoice-box table tr.top table td {
+		padding-bottom: 20px;
+	}
+
+	.invoice-box table tr.top table td.logo {
+		font-size: 22px;
+		font-weight: bold;
+	}
+
+	.invoice-box table tr.top table td.logo img {
+		width: 160px;
+	}
+
+	.invoice-box table tr.top table td.details {
+		text-align: right;
+	}
+
+	.invoice-box table tr.information table tr:last-child td {
+		padding-bottom: 40px;
+	}
+
+	.invoice-box table tr.information table td:nth-child(2) {
+		text-align: right;
+	}
+
+	.invoice-box table tr.item-heading td {
+		background: #eee;
+		border-bottom: 1px solid #ddd;
+		font-weight: bold;
+	}
+
+	.invoice-box table tr.item-heading td:nth-child(n+2) {
+		text-align: right;
+	}
+
+	.invoice-box table tr.item td {
+		border-bottom: 1px solid #eee;
+	}
+
+	.invoice-box table tr.item td:nth-child(n+3) {
+		text-align: right;
+	}
+
+	.invoice-box .amount, .invoice-box .price {
+		white-space: nowrap;
+	}
+
+	.invoice-box tr.bottom table td:nth-child(1) {
+		width: 100%;
+		text-align: right;
+	}
+
+	.invoice-box tr.bottom table tr:last-child td {
+		padding-bottom: 40px;
+	}
+
+	.invoice-box tr.bottom table td:nth-child(2) {
+		text-align: right;
+	}
+
+	.invoice-box table tr.total td {
+		font-weight: bold;
+	}
+
+	.invoice-box .subtitle {
+		font-size: 80%;
+	}
+</style>
+<script id="_aig-template" type="text/x-handlebars-template">
+	<div class="invoice-box">
+		<table cellpadding="0" cellspacing="0">
+			<tr class="top">
+				<td colspan="5">
+					<table>
+						<tr>
+							<td class="logo">
+								<img class="local" src="icons/aliexpress.png"><br>
+								Invoice
+							</td>
+							<td class="details">
+								Order {{order.number}}<br>
+								{{order.date}}<br>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr class="information">
+				<td colspan="5">
+					<table>
+						<tr class="heading">
+							<td>
+								Store
+							</td>
+							<td>
+								Buyer
+							</td>
+						</tr>
+						<tr>
+							<td class="store">
+								{{store.name}}<br>
+								<span class="subtitle">{{store.url}}</span>
+							</td>
+							<td class="buyer">
+								{{buyer.name}}<br>
+								{{buyer.street}}<br>
+								{{buyer.zip}} {{buyer.city}}<br>
+								{{buyer.region}}
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr class="heading">
+				<td colspan="5">Order Details</td>
+			</tr>
+			<tr class="item-heading">
+				<td colspan="2">
+					Article
+				</td>
+				<td>
+					Amount
+				</td>
+				<td>
+					Price
+				</td>
+				<td>
+					Total
+				</td>
+			</tr>
+			{{#items}}
+			<tr class="item">
+				<td>
+					<img src="{{image}}">
+				</td>
+				<td>
+					{{title}}<br>
+					<span class="subtitle">{{subtitle}}</span>
+				</td>
+				<td class="amount">
+					{{amount}}
+				</td>
+				<td class="price">
+					{{price}}
+				</td>
+				<td class="price">
+					{{total}}
+				</td>
+			</tr>
+			{{/items}}
+			<tr class="bottom">
+				<td colspan="5">
+					<table>
+						<tr>
+							<td>
+								Shipping
+							</td>
+							<td class="price">
+								{{shipping}}
+							</td>
+						</tr>
+						<tr class="total">
+							<td>
+								Total
+							</td>
+							<td class="price">
+								{{total}}
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			{{#if refundedItems}}
+			<tr class="heading">
+				<td colspan="5">Refund Information</td>
+			</tr>
+			<tr class="item-heading">
+				<td colspan="2">
+					Article
+				</td>
+				<td colspan="3">
+					Refund
+				</td>
+			</tr>
+			{{/if}}
+			{{#refundedItems}}
+			<tr class="item">
+				<td>
+					<img src="{{image}}">
+				</td>
+				<td>
+					{{title}}<br>
+				</td>
+				<td class="price" colspan="3">
+					{{total}}
+				</td>
+			</tr>
+			{{/refundedItems}}
+		</table>
+	</div>
+</script>
+<div id="_aig-container"></div>
