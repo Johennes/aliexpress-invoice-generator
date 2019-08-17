@@ -9,3 +9,7 @@ You can install the extension directly from the official [addons.mozilla.org](ht
 ## Running (from Code)
 
 For development and testing you can run the extension from code without installing using `web-ext`. The `run.sh` script encapsulates the latter.
+
+## Credits
+
+The invoice template is an adaptation of [sparksuite/simple-html-invoice-template](https://github.com/sparksuite/simple-html-invoice-template).
