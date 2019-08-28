@@ -59,7 +59,11 @@
 	}
 
 	function getOrderDate() {
-		return $('#operate-pnl li:last span').text()
+		var result = $('#operate-pnl li:last span').text().trim();
+		if (!result) {
+			result = $('td.pay-c4').text().trim();
+		}
+		return result;
 	}
 
 	function getStoreName() {
