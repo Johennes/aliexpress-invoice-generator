@@ -126,6 +126,10 @@
 	.invoice-box .subtitle {
 		font-size: 80%;
 	}
+
+	.invoice-box .disclaimer {
+		font-style: italic;
+	}
 </style>
 <script id="_aig-template" type="text/x-handlebars-template">
 	<div class="invoice-box">
@@ -266,6 +270,9 @@
 			</tr>
 			{{/refundedItems}}
 		</table>
+		<p class="disclaimer">
+			Due to currency conversions the addition of all line items might be different from the listed total price.
+		</p>
 	</div>
 </script>
 <div id="_aig-container"></div>
