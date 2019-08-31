@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "AliExpress Invoice Generator",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Generates print-ready invoices from AliExpress order detail websites",
   "icons": {
     "48": "icons/icon-48.png",
