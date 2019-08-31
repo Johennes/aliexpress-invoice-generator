@@ -49,6 +49,7 @@
 			},
 			items: getItems(),
 			shipping: getShippingTotal(),
+			discount: getDiscount(),
 			total: getTotal(),
 			refundedItems: getRefundedItems()
 		};
@@ -124,6 +125,14 @@
 
 	function getTotal() {
 		return $('div.final-price').eq(2).text().substring(4);
+	}
+
+	function getDiscount() {
+		var lines = $('td.discount-price').html().trim().split('<br');
+		if (lines.length < 2) {
+			return null;
+		}
+		return lines[1].replace(/^[\/>\s]+/g, '').substring(4);
 	}
 
 	function getRefundedItems() {
