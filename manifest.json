@@ -8,10 +8,13 @@
     "96": "icons/icon-96.png",
     "128": "icons/icon-128.png"
   },
+  "background": {
+    "scripts": ["background.js"]
+  },
   "content_scripts": [
     {
       "matches": ["*://trade.aliexpress.com/order_detail*"],
-      "js": ["jquery-3.4.1.min.js", "handlebars-4.1.2.min.js", "main.js"]
+      "js": ["jquery-3.4.1.min.js", "handlebars-4.1.2.min.js", "content.js"]
     }
   ]
 }

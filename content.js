@@ -164,7 +164,8 @@
 		button.html('Print');
 		button.attr('id', '_aig-print-button');
 		button.click(function() {
-			window.print();
+			let port = browser.runtime.connect();
+			port.postMessage();
 		});
 		$('.order-operate').append(button);
 	}
