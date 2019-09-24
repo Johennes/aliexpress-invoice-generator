@@ -42,7 +42,8 @@
 			},
 			buyer: {
 				name: getBuyerName(),
-				street: getBuyerStreet(),
+				street1: getBuyerStreet1(),
+				street2: getBuyerStreet2(),
 				zip: getBuyerZip(),
 				city: getBuyerCity(),
 				region: getBuyerRegion()
@@ -79,13 +80,25 @@
 		return $('.user-shipping span[i18entitle="Contact Name"]').text();
 	}
 
-	function getBuyerStreet() {
-		return $('.user-shipping span[i18entitle="Address"]').text();
+	function getBuyerStreet1() {
+		let lines = document.querySelectorAll('ul#user-shipping-list li.long')
+		if (lines.length > 0) {
+			return lines[0].querySelector('span').textContent.trim()
+		}
+	}
+
+	function getBuyerStreet2() {
+		let lines = document.querySelectorAll('ul#user-shipping-list li.long')
+		if (lines.length > 2) {
+			return lines[1].querySelector('span').textContent.trim()
+		}
 	}
 
 	function getBuyerCityRegion() {
-		return $('.user-shipping span[i18entitle="Address"]').parents('li')
-			.next('li').find('span.i18ncopy').text().trim();
+		let lines = document.querySelectorAll('ul#user-shipping-list li.long')
+		if (lines.length > 1) {
+			return lines[lines.length - 1].querySelector('span').textContent.trim()
+		}
 	}
 
 	function getBuyerCity() {

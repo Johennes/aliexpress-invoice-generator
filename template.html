@@ -168,7 +168,10 @@
 							</td>
 							<td class="buyer">
 								{{buyer.name}}<br>
-								{{buyer.street}}<br>
+								{{buyer.street1}}<br>
+								{{#if buyer.street2}}
+								{{buyer.street2}}<br>
+								{{/if}}
 								{{buyer.zip}} {{buyer.city}}<br>
 								{{buyer.region}}
 							</td>
