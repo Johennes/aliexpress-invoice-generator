@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "AliExpress Invoice Generator",
-  "version": "1.0.0",
-  "description": "Generates print-ready invoices from AliExpress order detail websites",
+  "version": "2.0.0",
+  "description": "Generates PDF invoices from AliExpress order detail websites",
   "icons": {
     "48": "icons/icon-48.png",
     "96": "icons/icon-96.png",
@@ -10,11 +10,35 @@
   },
   "background": {
     "scripts": ["background.js"]
-  },
+  },    
   "content_scripts": [
     {
-      "matches": ["*://trade.aliexpress.com/order_detail*"],
-      "js": ["jquery-3.4.1.min.js", "handlebars-4.1.2.min.js", "content.js"]
+     "matches": ["*://trade.aliexpress.com/order_detail*"],
+      "js": ["jquery-3.4.1.min.js", "pdfkit.standalone.js", "content.js"]
     }
-  ]
+  ],
+  "page_action": {
+    "browser_style": true,
+    "default_icon": {
+      "19": "icons/icon-19.png",
+      "38": "icons/icon-38.png"
+    },
+    "default_title": "Generate PDF Invoice",
+    "show_matches": ["*://trade.aliexpress.com/order_detail*"]
+  },
+  "options_ui": {
+    "page": "options.html",
+    "browser_style": true
+  },
+  "web_accessible_resources": [
+    "icons/aliexpress.png"
+  ],
+  "permissions": [
+    "storage"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{b528e080-bcc1-4f58-89b8-da9a54df78b2}"
+    }
+  }
 }
