@@ -1,0 +1,25 @@
+#!/bin/bash
+
+npm i web-ext
+
+if [[ ! -f pdfkit.standalone.js ]]; then
+    wget https://github.com/foliojs/pdfkit/releases/download/v0.10.0/pdfkit.standalone.js
+fi
+
+command=$1
+
+if [[ $command = run ]]; then
+    flags=--verbose
+elif [[ $command = build ]]; then
+    flags=--overwrite-dest
+fi
+
+node_modules/web-ext/bin/web-ext $command $flags \
+    --ignore-files "**/*.xcf" \
+    --ignore-files "CHANGELOG.md" \
+    --ignore-files "COPYING" \
+    --ignore-files "README.md" \
+    --ignore-files "package-lock.json" \
+    --ignore-files "web-ext" \
+    --ignore-files "screenshots" \
+    $@
