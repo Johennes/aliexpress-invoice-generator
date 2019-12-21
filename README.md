@@ -7,9 +7,9 @@ form and so I ended up creating this extension.
 
 The PDF generation is based on [PDFKit].
 
-![](screenshots/screenshot1.png "Two ways to create the invoice")
+![](screenshots/screenshot-1.png "Two ways to create the invoice")
 
-![](screenshots/screenshot2.png "Generated PDF")
+![](screenshots/screenshot-2.png "Generated PDF")
 
 ## Installing
 
