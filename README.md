@@ -7,6 +7,10 @@ form and so I ended up creating this extension.
 
 The PDF generation is based on [PDFKit].
 
+![](screenshots/screenshot1.png "Two ways to create the invoice")
+
+![](screenshots/screenshot2.png "Generated PDF")
+
 ## Installing
 
 You can install the extension directly from the official [addons.mozilla.org] website.
