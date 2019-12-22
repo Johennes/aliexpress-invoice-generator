@@ -1,6 +1,7 @@
 // Copyright 2019 Johannes Marbach
 //
-// This file is part of Wallabaggerini, hereafter referred to as the program.
+// This file is part of AliExpress Invoice Generator, hereafter referred
+// to as the program.
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
