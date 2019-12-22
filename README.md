@@ -11,6 +11,8 @@ The PDF generation is based on [PDFKit].
 
 ![](screenshots/screenshot-2.png "Generated PDF")
 
+![](screenshots/screenshot-3.png "Extension settings")
+
 ## Installing
 
 You can install the extension directly from the official [addons.mozilla.org] website.
