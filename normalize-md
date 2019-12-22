@@ -1,0 +1,3 @@
+#!/bin/bash
+
+pandoc -f markdown -t markdown --toc -s --reference-links "$1" > "$1.norm" && mv "$1.norm" "$1"
