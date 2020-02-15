@@ -59,6 +59,8 @@
   // Invoice Data Extraction
 
   function getContext() {
+		let total = getTotal()
+		let tax = getTax(total)
 		return {
 			order: {
 				number: getOrderNumber(),
@@ -79,7 +81,8 @@
 			items: getItems(),
 			shipping: getShippingTotal(),
 			discount: getDiscount(),
-			total: getTotal(),
+			tax: tax,
+			total: total,
 			refundedItems: getRefundedItems()
 		};
 	}
@@ -161,11 +164,11 @@
 	}
 
 	function getShippingTotal() {
-		return $('div.final-price').eq(1).text().substring(4);
+		return $('div.final-price').eq(1).text().substring(4).trim();
 	}
 
 	function getTotal() {
-		return $('div.final-price').eq(2).text().substring(4);
+		return $('div.final-price').eq(2).text().substring(4).trim();
 	}
 
 	function getDiscount() {
@@ -173,7 +176,7 @@
 		if (lines.length < 2) {
 			return null;
 		}
-		return lines[1].replace(/^[\/>\s]+/g, '').substring(4);
+		return lines[1].replace(/^[\/>\s]+/g, '').substring(4).trim();
 	}
 
 	function getRefundedItems() {
@@ -184,6 +187,16 @@
 				total: $(this).find('td.refund-cash').text().trim().substring(4)
 			};
 		}).toArray();
+	}
+
+	function getTax(price) {
+		if (price.match(/\d+,\d+$/)) {
+			return price.replace(/\d+,\d+$/, "0,00")
+		}
+		if (price.match(/\d+\.\d+$/)) {
+			return price.replace(/\d+\.\d+$/, "0.00")
+		}
+		return null
 	}
 
   // Generalized PDF Builder
@@ -504,6 +517,9 @@
     builder.pushYOffset()
 
     let totalRows = [["Shipping", context.shipping], ["Total", context.total]]
+    if (context.tax) {
+      totalRows.splice(1, 0, ["Tax / VAT", context.tax])
+    }
     if (context.discount) {
       totalRows.splice(1, 0, ["Discount", `- ${context.discount}`])
     }

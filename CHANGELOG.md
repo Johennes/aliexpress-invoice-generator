@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
+### Added
+
+- Insert always-zero tax line item in total breakdown
+
 ### Changed
 
 - Replace "Order 123..." with "Invoice 123..."
