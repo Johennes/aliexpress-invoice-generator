@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
-- Nothing at the moment
+### Changed
+
+- Replace "Order 123..." with "Invoice 123..."
 
 ## [2.0.0] - 2019-12-12
 

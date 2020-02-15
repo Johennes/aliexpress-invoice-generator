@@ -417,7 +417,7 @@
 
     builder.setFont(regularFont)
     builder.setFontSize(baseFontSize)
-    builder.addText(`Order ${context.order.number}\n${context.order.date}`, 0, 0, {
+    builder.addText(`Invoice No. ${context.order.number}\n${context.order.date}`, 0, 0, {
       align: 'right'
     })
 
