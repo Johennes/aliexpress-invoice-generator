@@ -28,13 +28,19 @@
   function onConnect(port) {
     port.onMessage.addListener((message) => {
       port.disconnect()
-      showPdf(message.buffers)
+      savePdf(message.buffers, message.date, message.number)
     })
   }
 
-  function showPdf(buffers) {
-    browser.tabs.create({
+  function savePdf(buffers, date, number) {
+    browser.downloads.download({
       url: URL.createObjectURL(new Blob(buffers, {type: 'application/pdf'})),
+      filename: `invoice-${getFilenameComponent(date)}-${getFilenameComponent(number)}.pdf`,
+      saveAs: true
     })
+  }
+
+  function getFilenameComponent(string) {
+    return string.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9_-]/gi, '')
   }
 })()

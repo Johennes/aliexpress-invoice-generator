@@ -30,16 +30,16 @@
 		let button = $('.order-operate button').eq(0).clone()
 		button.html('Generate PDF Invoice')
 		button.attr('id', '_aig-print-button')
-		button.click(showPdf)
+		button.click(storePdf)
 		$('.order-operate').append(button)
   }
 
-  async function showPdf() {
+  async function storePdf() {
     let settings = await loadSettings()
     let context = getContext()
     let buffers = await createPdf(settings, context)
     let port = browser.runtime.connect()
-    port.postMessage({ buffers: buffers })
+    port.postMessage({ buffers: buffers, date: context.order.date, number: context.order.number })
   }
 
   async function loadSettings() {
@@ -52,7 +52,7 @@
   function onConnect(port) {
     port.onMessage.addListener((message) => {
       port.disconnect()
-      showPdf()
+      storePdf()
     })
   }
 
