@@ -43,9 +43,10 @@
   }
 
   async function loadSettings() {
-    let result = await browser.storage.sync.get(['pageSize'])
+    let result = await browser.storage.sync.get(['pageSize', 'buyerExtraInfo'])
     return {
-      pageSize: result.hasOwnProperty('pageSize') ? result.pageSize : 'A4'
+      pageSize: result.hasOwnProperty('pageSize') ? result.pageSize : 'A4',
+      buyerExtraInfo: result.hasOwnProperty('buyerExtraInfo') ? result.buyerExtraInfo : ''
     }
   }
   
@@ -444,16 +445,20 @@
 
     builder.pushYOffset()
 
-    let buyerAddress = [
+    let buyerLines = [
       context.buyer.name,
       context.buyer.street1,
       context.buyer.street2,
       `${context.buyer.zip} ${context.buyer.city}`,
       context.buyer.region].filter(element => element).join('\n')
 
+    if (settings.buyerExtraInfo) {
+      buyerLines += `\n${settings.buyerExtraInfo}`
+    }
+
     builder.setFont(regularFont)
     builder.setFontSize(baseFontSize)
-    builder.addText(buyerAddress, 0, 3, {
+    builder.addText(buyerLines, 0, 3, {
       align: 'right'
     })
 

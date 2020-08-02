@@ -19,20 +19,38 @@
 (() => {
   document.addEventListener('DOMContentLoaded', () => {
     restorePageSize()
+    restoreBuyerExtraInfo()
   })
 
-  document.querySelector('select[name=page-size]').addEventListener('change', storePageSize)
+  const pageSizeSelector = 'select[name=page-size]'
+  document.querySelector(pageSizeSelector).addEventListener('change', storePageSize)
 
   function storePageSize() {
     browser.storage.sync.set({
-      pageSize: document.querySelector('select[name=page-size]').value
+      pageSize: document.querySelector(pageSizeSelector).value
     })
   }
 
   function restorePageSize() {
     browser.storage.sync.get('pageSize').then((result) => {
       let pageSize = result.hasOwnProperty('pageSize') ? result.pageSize : 'A4'
-      document.querySelector('select[name=page-size]').value = pageSize
+      document.querySelector(pageSizeSelector).value = pageSize
+    })
+  }
+
+  const buyerExtraInfoSelector = 'textarea[name=buyer-extra-info]'
+  document.querySelector(buyerExtraInfoSelector).addEventListener('change', storeBuyerExtraInfo)
+
+  function storeBuyerExtraInfo() {
+    browser.storage.sync.set({
+      buyerExtraInfo: document.querySelector(buyerExtraInfoSelector).value
+    })
+  }
+
+  function restoreBuyerExtraInfo() {
+    browser.storage.sync.get('buyerExtraInfo').then((result) => {
+      let buyerExtraInfo = result.hasOwnProperty('buyerExtraInfo') ? result.buyerExtraInfo : ''
+      document.querySelector(buyerExtraInfoSelector).value = buyerExtraInfo
     })
   }
 })()

@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
-- Nothing at the moment
+### Added
+
+- Allow specification of additional lines for buyer section in preferences (#3)
 
 ## [2.2.0] - 2020-06-18
 
