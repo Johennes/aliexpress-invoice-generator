@@ -1,4 +1,4 @@
-// Copyright 2019 Johannes Marbach
+// Copyright 2019, 2020 Johannes Marbach
 //
 // This file is part of AliExpress Invoice Generator, hereafter referred
 // to as the program.
@@ -17,8 +17,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 (() => {
+  browser.runtime.onInstalled.addListener(onExtensionUpdated)
   browser.pageAction.onClicked.addListener(onPageActionClicked)
   browser.runtime.onConnect.addListener(onConnect)
+
+  function onExtensionUpdated(info) {
+    if (info.temporary) {
+      return
+    }
+    switch (info.reason) {
+      case "update":
+        {
+          const url = browser.runtime.getURL("upboard.html")
+          browser.tabs.create({ url })
+        }
+        break
+    }
+  }
 
   function onPageActionClicked(tab) {
     let port = browser.tabs.connect(tab.id)
