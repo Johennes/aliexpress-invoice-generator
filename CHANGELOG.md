@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
+Nothing at the moment
+
+## [2.3.0] - 2020-08-02
+
 ### Added
 
 - Allow specification of additional lines for buyer section in preferences (#3)
@@ -69,7 +73,8 @@ Initial release
 
 [Keep a Changelog]: https://keepachangelog.com/en/1.0.0/
 [Semantic Versioning]: https://semver.org/spec/v2.0.0.html
-[Unreleased]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.2.0...master
+[Unreleased]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.3.0...master
+[2.3.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.2.0...2.3.0
 [2.2.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.1.0...2.2.0
 [2.1.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.0.0...2.1.0
 [2.0.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/1.0.0...2.0.0
