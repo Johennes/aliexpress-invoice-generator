@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
-Nothing at the moment
+### Changed
+
+- New logo
 
 ## [2.3.0] - 2020-08-02
 

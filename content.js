@@ -593,7 +593,7 @@
   }
 
   async function getLogo() {
-    let response = await fetch(new Request(browser.extension.getURL("icons/aliexpress.png")))
+    let response = await fetch(new Request(browser.extension.getURL("aliexpress.png")))
     let buffer = await response.arrayBuffer()
     return buffer
   }
