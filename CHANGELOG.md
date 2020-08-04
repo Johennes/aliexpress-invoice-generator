@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 - New logo
 
+### Fixed
+
+- Use embedded font (OpenSans) to avoid missing glyphs (e.g. £) on some operating systems
+
 ## [2.3.0] - 2020-08-02
 
 ### Added

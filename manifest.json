@@ -31,7 +31,7 @@
     "browser_style": true
   },
   "web_accessible_resources": [
-    "aliexpress.png"
+    "aliexpress.png", "fonts/OpenSans-Bold.ttf", "fonts/OpenSans-Light.ttf", "fonts/OpenSans-Regular.ttf"
   ],
   "permissions": [
     "storage",

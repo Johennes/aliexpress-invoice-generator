@@ -210,6 +210,10 @@
       this.yMax = 0
     }
 
+    registerFont(name, buffer) {
+      this.doc.registerFont(name, buffer)
+    }
+
     setFont(font) {
       this.doc.font(font)
     }
@@ -409,13 +413,19 @@
   // Invoice PDF Creation
 
   async function createPdf(settings, context) {
-    let regularFont = 'Helvetica'  
-    let boldFont = 'Helvetica-Bold'
+    let font = 'OpenSans'
+    let lightFont = `${font}-Light`
+    let regularFont = `${font}-Regular`
+    let boldFont = `${font}-Bold`
     let baseFontSize = 10
 
     let builder = new PdfBuilder(settings.pageSize, 72)
 
-    builder.addImage(await getLogo(), 0, 0, {
+    builder.registerFont(lightFont, await getFile(`fonts/${lightFont}.ttf`))
+    builder.registerFont(regularFont, await getFile(`fonts/${regularFont}.ttf`))
+    builder.registerFont(boldFont, await getFile(`fonts/${boldFont}.ttf`))
+
+    builder.addImage(await getFile("aliexpress.png"), 0, 0, {
       width: 100
     })
 
@@ -504,7 +514,7 @@
         return i === 1 || i === itemRows.length
       },
       (i, j, k) => {
-        return i === 0 ? boldFont : regularFont
+        return i === 0 ? boldFont : j === 0 && k > 0 ? lightFont : regularFont
       },
       (i, j, k) => {
         return j === 0 && k > 0 ? baseFontSize * 0.8 : baseFontSize
@@ -592,8 +602,8 @@
     return await builder.build()
   }
 
-  async function getLogo() {
-    let response = await fetch(new Request(browser.extension.getURL("aliexpress.png")))
+  async function getFile(path) {
+    let response = await fetch(new Request(browser.extension.getURL(path)))
     let buffer = await response.arrayBuffer()
     return buffer
   }
