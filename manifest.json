@@ -27,7 +27,7 @@
     "show_matches": ["*://trade.aliexpress.com/order_detail*"]
   },
   "options_ui": {
-    "page": "options.html",
+    "page": "views/options.html",
     "browser_style": true
   },
   "web_accessible_resources": [

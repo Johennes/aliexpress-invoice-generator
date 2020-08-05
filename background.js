@@ -28,7 +28,7 @@
     switch (info.reason) {
       case "update":
         {
-          const url = browser.runtime.getURL("upboard.html")
+          const url = browser.runtime.getURL("views/upboard.html")
           browser.tabs.create({ url })
         }
         break
