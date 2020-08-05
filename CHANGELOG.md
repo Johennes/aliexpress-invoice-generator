@@ -6,10 +6,14 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
+### Added
+
+- Inline settings button on order details page
+
 ### Changed
 
 - New logo
-- Colorize inline print button to set it apart from normal page content
+- Colorize inline buttons to set them apart from normal page content
 
 ### Fixed
 

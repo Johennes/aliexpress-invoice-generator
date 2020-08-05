@@ -25,9 +25,10 @@
 
   function addButton() {
     const lastButtonSelector = '.order-operate button:last-of-type'
-    const buttonId = '_aig-print-button'
+    const settingsButtonId = '_aig-settings-button'
+    const printButtonId = '_aig-print-button'
 
-    if (document.querySelector(`#${buttonId}`) || !document.querySelector(lastButtonSelector)) {
+    if (document.querySelector(`#${printButtonId}`) || !document.querySelector(lastButtonSelector)) {
       setTimeout(() => {
         addButton()
       }, 100)
@@ -36,18 +37,28 @@
 
     let lastButton = document.querySelector(lastButtonSelector)
 
+    let settingsButton = lastButton.cloneNode(true)
+    settingsButton.setAttribute('id', settingsButtonId)
+    settingsButton.innerHTML = 'Add-On Settings'
+    settingsButton.addEventListener('click', openSettings)
+    settingsButton.style.background = 'none'
+    settingsButton.style.color = '#e62e04'
+    settingsButton.style.borderColor = '#e62e04'
+    lastButton.insertAdjacentElement('afterend', settingsButton)
+
     let printButton = lastButton.cloneNode(true)
-    printButton.setAttribute('id', buttonId)
+    printButton.setAttribute('id', printButtonId)
     printButton.innerHTML = 'PDF Invoice'
     printButton.addEventListener('click', storePdf)
-    applyButtonStyle(printButton)
+    printButton.style.background = '#e62e04'
+    printButton.style.color = '#ffffff'
+    printButton.style.borderColor = '#e62e04'
     lastButton.insertAdjacentElement('afterend', printButton)
   }
 
-  function applyButtonStyle(button) {
-    button.style.background = '#e62e04'
-    button.style.color = '#ffffff'
-    button.style.border = 'none'
+  function openSettings() {
+    let port = browser.runtime.connect()
+    port.postMessage({ action: 'open-settings' })
   }
 
   async function storePdf() {
@@ -55,7 +66,7 @@
     let context = getContext()
     let buffers = await createPdf(settings, context)
     let port = browser.runtime.connect()
-    port.postMessage({ buffers: buffers, date: context.order.date, number: context.order.number })
+    port.postMessage({ action: 'store-pdf', buffers: buffers, date: context.order.date, number: context.order.number })
   }
 
   async function loadSettings() {

@@ -43,11 +43,16 @@
   function onConnect(port) {
     port.onMessage.addListener((message) => {
       port.disconnect()
-      savePdf(message.buffers, message.date, message.number)
+      switch (message.action) {
+        case 'open-settings':
+          browser.runtime.openOptionsPage()
+        case 'store-pdf':
+          storePdf(message.buffers, message.date, message.number)
+      }
     })
   }
 
-  function savePdf(buffers, date, number) {
+  function storePdf(buffers, date, number) {
     browser.downloads.download({
       url: URL.createObjectURL(new Blob(buffers, {type: 'application/pdf'})),
       filename: `invoice-${getFilenameComponent(date)}-${getFilenameComponent(number)}.pdf`,
