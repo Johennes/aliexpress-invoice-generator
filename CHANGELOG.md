@@ -9,10 +9,12 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 ### Changed
 
 - New logo
+- Colorize inline print button to set it apart from normal page content
 
 ### Fixed
 
 - Use embedded font (OpenSans) to avoid missing glyphs (e.g. £) on some operating systems
+- Make inline print button placement more robust (sometimes did not show)
 
 ## [2.3.0] - 2020-08-02
 

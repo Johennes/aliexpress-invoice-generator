@@ -17,21 +17,37 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 (function() {
-  window.addEventListener('load', () => {
-    addButton()
-  })
+  addButton()
 
   browser.runtime.onConnect.addListener(onConnect)
 
   // Misc
 
   function addButton() {
-		$('#_aig-print-button').remove()
-		let button = $('.order-operate button').eq(0).clone()
-		button.html('Generate PDF Invoice')
-		button.attr('id', '_aig-print-button')
-		button.click(storePdf)
-		$('.order-operate').append(button)
+    const lastButtonSelector = '.order-operate button:last-of-type'
+    const buttonId = '_aig-print-button'
+
+    if (document.querySelector(`#${buttonId}`) || !document.querySelector(lastButtonSelector)) {
+      setTimeout(() => {
+        addButton()
+      }, 100)
+      return
+    }
+
+    let lastButton = document.querySelector(lastButtonSelector)
+
+    let printButton = lastButton.cloneNode(true)
+    printButton.setAttribute('id', buttonId)
+    printButton.innerHTML = 'PDF Invoice'
+    printButton.addEventListener('click', storePdf)
+    applyButtonStyle(printButton)
+    lastButton.insertAdjacentElement('afterend', printButton)
+  }
+
+  function applyButtonStyle(button) {
+    button.style.background = '#e62e04'
+    button.style.color = '#ffffff'
+    button.style.border = 'none'
   }
 
   async function storePdf() {
