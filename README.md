@@ -9,11 +9,11 @@ The website content extraction is in part based on [jQuery].
 
 The PDF generation is based on [PDFKit].
 
-![](screenshots/screenshot-1.png "Two ways to create the invoice")
+![](screenshots/onboarding-1.png "Two ways to create the invoice")
 
-![](screenshots/screenshot-2.png "Generated PDF")
+![](screenshots/onboarding-2.png "Generated PDF")
 
-![](screenshots/screenshot-3.png "Extension settings")
+![](screenshots/onboarding-3.png "Extension settings")
 
 ## Installing
 
