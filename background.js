@@ -26,7 +26,12 @@
       return
     }
     switch (info.reason) {
-      case "update":
+      case 'install':
+        {
+          const url = browser.runtime.getURL("views/onboard.html")
+          browser.tabs.create({ url })
+        }
+      case 'update':
         {
           const url = browser.runtime.getURL("views/upboard.html")
           browser.tabs.create({ url })

@@ -35,7 +35,10 @@
     "fonts/OpenSans-Bold.ttf",
     "fonts/OpenSans-Light.ttf",
     "fonts/OpenSans-Regular.ttf",
-    "icons/icon-128.png"
+    "icons/icon-128.png",
+    "screenshots/onboarding-1.png",
+    "screenshots/onboarding-2.png",
+    "screenshots/onboarding-3.png"
   ],
   "permissions": [
     "storage",

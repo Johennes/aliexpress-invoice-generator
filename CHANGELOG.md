@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 ### Added
 
 - Inline settings button on order details page
+- New onboarding page to explain usage
 
 ### Changed
 
