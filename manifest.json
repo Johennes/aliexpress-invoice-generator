@@ -9,12 +9,12 @@
     "128": "icons/icon-128.png"
   },
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["browser-polyfill.js", "background.js"]
   },    
   "content_scripts": [
     {
      "matches": ["*://trade.aliexpress.com/order_detail*"],
-      "js": ["jquery-3.4.1.min.js", "pdfkit.standalone.js", "content.js"]
+      "js": ["browser-polyfill.js", "jquery-3.4.1.min.js", "pdfkit.standalone.js", "content.js"]
     }
   ],
   "page_action": {

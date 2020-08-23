@@ -52,14 +52,19 @@
         case 'open-settings':
           browser.runtime.openOptionsPage()
         case 'store-pdf':
-          storePdf(message.buffers, message.date, message.number)
+          storePdf(message.chunks, message.date, message.number)
       }
     })
   }
 
-  function storePdf(buffers, date, number) {
+  function storePdf(chunks, date, number) {
+    let arrayChunks = chunks
+    // Chrome converts [Uint8Array] to a JSON object during messaging, convert it back here
+    if (chunks.length > 0 && chunks[0].constructor === Object && chunks[0].data !== undefined) {
+      arrayChunks = chunks.map(chunk => new Uint8Array(chunk.data))
+    }
     browser.downloads.download({
-      url: URL.createObjectURL(new Blob(buffers, {type: 'application/pdf'})),
+      url: URL.createObjectURL(new Blob(arrayChunks, {type: 'application/pdf'})),
       filename: `invoice-${getFilenameComponent(date)}-${getFilenameComponent(number)}.pdf`,
       saveAs: true
     })

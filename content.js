@@ -64,9 +64,9 @@
   async function storePdf() {
     let settings = await loadSettings()
     let context = getContext()
-    let buffers = await createPdf(settings, context)
+    let chunks = await createPdf(settings, context)
     let port = browser.runtime.connect()
-    port.postMessage({ action: 'store-pdf', buffers: buffers, date: context.order.date, number: context.order.number })
+    port.postMessage({ action: 'store-pdf', chunks: chunks, date: context.order.date, number: context.order.number })
   }
 
   async function loadSettings() {
@@ -429,9 +429,9 @@
 
     build() {
       return new Promise((resolve, reject) => {
-        let buffers = []
-        this.doc.on('data', buffers.push.bind(buffers));
-        this.doc.on('end', () => { resolve(buffers) })
+        let chunks = []
+        this.doc.on('data', chunks.push.bind(chunks));
+        this.doc.on('end', () => { resolve(chunks) })
         this.doc.end()
       })
     }
