@@ -51,10 +51,13 @@
       switch (message.action) {
         case 'show-page-action':
           browser.pageAction.show(port.sender.tab.id)
+          break
         case 'open-settings':
           browser.runtime.openOptionsPage()
+          break
         case 'store-pdf':
           storePdf(message.chunks, message.date, message.number)
+          break
       }
     })
   }
