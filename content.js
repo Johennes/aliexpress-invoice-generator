@@ -19,6 +19,10 @@
 (function() {
   addButton()
 
+  // Explicit call to browser.pageAction.show needed in Chrome. Trigger it from
+  // here to avoid requesting the tabs permission.
+  showPageAction()
+
   browser.runtime.onConnect.addListener(onConnect)
 
   // Misc
@@ -54,6 +58,11 @@
     printButton.style.color = '#ffffff'
     printButton.style.borderColor = '#e62e04'
     lastButton.insertAdjacentElement('afterend', printButton)
+  }
+
+  function showPageAction() {
+    let port = browser.runtime.connect()
+    port.postMessage({ action: 'show-page-action' })
   }
 
   function openSettings() {

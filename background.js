@@ -42,13 +42,15 @@
 
   function onPageActionClicked(tab) {
     let port = browser.tabs.connect(tab.id)
-    port.postMessage()
+    port.postMessage({})
   }
 
   function onConnect(port) {
     port.onMessage.addListener((message) => {
       port.disconnect()
       switch (message.action) {
+        case 'show-page-action':
+          browser.pageAction.show(port.sender.tab.id)
         case 'open-settings':
           browser.runtime.openOptionsPage()
         case 'store-pdf':
