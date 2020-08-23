@@ -17,7 +17,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 (function() {
-  addButton()
+  addButtons()
 
   // Explicit call to browser.pageAction.show needed in Chrome. Trigger it from
   // here to avoid requesting the tabs permission.
@@ -27,14 +27,14 @@
 
   // Misc
 
-  function addButton() {
+  function addButtons() {
     const lastButtonSelector = '.order-operate button:last-of-type'
     const settingsButtonId = '_aig-settings-button'
     const printButtonId = '_aig-print-button'
 
     if (document.querySelector(`#${printButtonId}`) || !document.querySelector(lastButtonSelector)) {
       setTimeout(() => {
-        addButton()
+        addButtons()
       }, 100)
       return
     }
