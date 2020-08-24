@@ -37,8 +37,10 @@
     "fonts/OpenSans-Regular.ttf",
     "icons/icon-128.png",
     "screenshots/onboarding-1.png",
+    "screenshots/onboarding-1-chrome.png",
     "screenshots/onboarding-2.png",
-    "screenshots/onboarding-3.png"
+    "screenshots/onboarding-3.png",
+    "screenshots/onboarding-3-chrome.png"
   ],
   "permissions": [
     "storage",

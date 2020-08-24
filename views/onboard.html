@@ -22,6 +22,7 @@
 <html>
   <head>
     <meta charset="utf-8"/>
+    <link rel="stylesheet" href="onboard.css">
   </head>
   <body>
       <img src="../icons/icon-128.png">
@@ -45,14 +46,16 @@
       <p>
         Using the add-on is extremely easy. Go to <a href="https://www.aliexpress.com">aliexpress.com</a> and open the details page for the order in question. Once on the page, there are two ways to generate the PDF. You can either click the page action button on the right side of the address bar (1) or the inline "PDF Invoice" button (2).
       </p>
-      <img src="../screenshots/onboarding-1.png">
+      <img id="onboarding-1" class="screenshot" src="../screenshots/onboarding-1.png">
       <p>
         Both buttons will scrape the data from the page, generate an invoice in PDF form and then open a file saving dialog. Once saved, the PDF will look similar to this.
       </p>
-      <img src="../screenshots/onboarding-2.png">
+      <img id="onboarding-2" class="screenshot" src="../screenshots/onboarding-2.png">
       <p>
         If you want to customise options for the PDF generation, you can do so by going to the add-on preferences.
       </p>
-      <img src="../screenshots/onboarding-3.png">
+      <img id="onboarding-3" class="screenshot" src="../screenshots/onboarding-3.png">
+      <script type="application/javascript" src="../browser-polyfill.js"></script>
+      <script type="application/javascript" src="onboard.js"></script>
   </body>
 </html>
