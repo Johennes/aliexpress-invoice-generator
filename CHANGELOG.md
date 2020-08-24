@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
-Nothing at the moment
+### Added
+
+- Support for Google Chrome
 
 ## [2.4.0] - 2020-08-06
 
