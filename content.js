@@ -321,8 +321,13 @@
         yOffset = 0
       }
 
-      this.doc.text(text, x + this.margin, yOffset + this.yOffset, options)
+      this.doc.text(this.sanitize(text), x + this.margin, yOffset + this.yOffset, options)
       this.yMax = Math.max(this.yMax, yOffset + height)
+    }
+
+    sanitize(text) {
+      return text
+        .replace('\uFFE1', '\u00A3') // Use regular instead of full-width Pound sign, the latter may not be contained in all fonts
     }
 
     addTable(rows, y, rowSpacing, columnSpacing, getHLine, getFont, getFontSize, getOptions) {
