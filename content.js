@@ -125,91 +125,240 @@
 	}
 
 	function getOrderNumber() {
-		return $('.order-no').text();
+    let element = document.querySelector('.order-no')
+    if (!element) {
+      console.error('Could not scrape order number');
+      return null;
+    }
+		return element.textContent.trim();
 	}
 
 	function getOrderDate() {
-		var result = $('#operate-pnl li:last span').text().trim();
-		if (!result) {
-			result = $('td.pay-c4').text().trim();
-		}
-		return result;
-	}
+    let date = getOrderDateFromOperatePanel();
+    if (!date) {
+      date = getOrderDateFromPayment();
+    }
+    if (!date) {
+      console.error('Could not scrape order date');
+      return null;
+    }
+    return date;
+  }
+
+  function getOrderDateFromOperatePanel() {
+    let lis = document.querySelectorAll('#operate-pnl li');
+    if (!lis || lis.length === 0) {
+      return null;
+    }
+    let span = lis[lis.length - 1].querySelector('span');
+    if (!span) {
+      return lis[lis.length - 1].textContent.trim();
+    }
+    return span.textContent.trim();
+  }
+
+	function getOrderDateFromPayment() {
+    let element = document.querySelector('td.pay-c4');
+    if (!element) {
+      return null;
+    }
+    return element.textContent.trim();
+  }
 
 	function getStoreName() {
-		return $('.user-name-text a').eq(0).text();
+    let element = document.querySelector('.user-name-text a')
+    if (!element) {
+      console.error('Could not scrape store name');
+      return null;
+    }
+    return element.textContent.trim();
 	}
 
 	function getStoreUrl() {
-		return $('.user-name-text a').attr('href').replace(/^\/*/, '').replace(/\?.*/, '');
+    let element = document.querySelector('.user-name-text a')
+    if (!element) {
+      console.error('Could not scrape store URL');
+      return null;
+    }
+    return element.getAttribute('href').replace(/^\/*/, '').replace(/\?.*/, '');
 	}
 
 	function getBuyerName() {
-		return $('.user-shipping span[i18entitle="Contact Name"]').text();
+    let element = document.querySelector('.user-shipping span[i18entitle="Contact Name"]')
+    if (!element) {
+      console.error('Could not scrape buyer name');
+      return null;
+    }
+    return element.textContent.trim();
 	}
 
 	function getBuyerStreet1() {
 		let lines = document.querySelectorAll('ul#user-shipping-list li.long')
-		if (lines.length > 0) {
-			return lines[0].querySelector('span').textContent.trim()
-		}
+		if (!lines || lines.length === 0) {
+      console.error('Could not scrape buyer street line 1');
+      return null;
+    }
+    let span = lines[0].querySelector('span')
+    if (!span) {
+      return lines[0].textContent.trim()
+    }
+    return span.textContent.trim()
 	}
 
 	function getBuyerStreet2() {
-		let lines = document.querySelectorAll('ul#user-shipping-list li.long')
-		if (lines.length > 2) {
-			return lines[1].querySelector('span').textContent.trim()
-		}
+    let lines = document.querySelectorAll('ul#user-shipping-list li.long')
+		if (!lines || lines.length <= 2) {
+      console.warn('Could not scrape buyer street line 2');
+      return null;
+    }
+    let span = lines[1].querySelector('span')
+    if (!span) {
+      return lines[1].textContent.trim()
+    }
+		return span.textContent.trim()
 	}
 
 	function getBuyerCityRegion() {
 		let lines = document.querySelectorAll('ul#user-shipping-list li.long')
-		if (lines.length > 1) {
-			return lines[lines.length - 1].querySelector('span').textContent.trim()
-		}
+    if (!lines || lines.length <= 1) {
+      return null;
+    }
+    let span = lines[lines.length - 1].querySelector('span')
+    if (!span) {
+      return lines[lines.length - 1].textContent.trim()
+    }
+    return span.textContent.trim()
 	}
 
 	function getBuyerCity() {
-		var cityRegion = getBuyerCityRegion();
-		var elements = cityRegion.split(',').map(function(element) { return element.trim() });
-		var cityElements = elements.slice(0, Math.max(1, elements.length - 2))
+    let cityRegion = getBuyerCityRegion();
+    if (!cityRegion) {
+      console.error('Could not scrape buyer city');
+      return null;
+    }
+		let elements = cityRegion.split(',').map(function(element) { return element.trim() });
+		let cityElements = elements.slice(0, Math.max(1, elements.length - 2))
 		return cityElements.join(', ')
 	}
 
 	function getBuyerRegion() {
-		var cityRegion = getBuyerCityRegion();
-		var elements = cityRegion.split(',').map(function(element) { return element.trim() });
-		var regionElements = elements.slice(Math.max(1, elements.length - 2))
+    let cityRegion = getBuyerCityRegion();
+    if (!cityRegion) {
+      console.error('Could not scrape buyer region');
+      return null;
+    }
+		let elements = cityRegion.split(',').map(function(element) { return element.trim() });
+		let regionElements = elements.slice(Math.max(1, elements.length - 2))
 		return regionElements.join(', ')
 	}
 
 	function getBuyerZip() {
-		return $('.user-shipping span[i18entitle="Zip Code"]').text();
+    let element = document.querySelector('.user-shipping span[i18entitle="Zip Code"]')
+    if (!element) {
+      console.error('Could not scrape buyer zip');
+      return null;
+    }
+    return element.textContent.trim();
 	}
 
 	function getItems() {
-		return $('table#TP_ProductTable tr.order-bd').map(function() {
-			return {
-				title: $(this).find('td.baobei a.baobei-name').text().trim(),
-				subtitle: $(this).find('td.baobei div.spec').text().trim().replace(/\s\s+/g, ' '),
-				image: $(this).find('td.baobei a.pic img').attr('src'),
-				amount: $(this).find('td.quantity').text().trim(),
-				price: $(this).find('td.price').text().trim(),
-				total: $(this).find('td.amount').text().trim()
-			};
-		}).toArray();
-	}
+    let rows = document.querySelectorAll('table#TP_ProductTable tr.order-bd')
+    if (!rows) {
+      console.error('Could not scrape items');
+      return null;
+    }
+    let result = [];
+    for (let i = 0; i < rows.length; ++i) {
+      result.push({
+				title: getItemTitle(rows[i]),
+				subtitle: getItemSubtitle(rows[i]),
+				image: getItemImage(rows[i]),
+				amount: getItemAmount(rows[i]),
+				price: getItemPrice(rows[i]),
+				total: getItemTotal(rows[i])
+			});
+    }
+    return result;
+  }
+
+  function getItemTitle(row) {
+    let element = row.querySelector('td.baobei a.baobei-name');
+    if (!element) {
+      console.error('Could not scrape item title');
+      return null;
+    }
+    return element.textContent.trim();
+  }
+
+  function getItemSubtitle(row) {
+    let element = row.querySelector('td.baobei div.spec');
+    if (!element) {
+      console.error('Could not scrape item subtitle');
+      return null;
+    }
+    return element.textContent.trim().replace(/\s\s+/g, ' ');
+  }
+
+  function getItemImage(row) {
+    let element = row.querySelector('td.baobei a.pic img');
+    if (!element) {
+      console.error('Could not scrape item image');
+      return null;
+    }
+    return element.getAttribute('src');
+  }
+
+  function getItemAmount(row) {
+    let element = row.querySelector('td.quantity');
+    if (!element) {
+      console.error('Could not scrape item amount');
+      return null;
+    }
+    return element.textContent.trim();
+  }
+
+  function getItemPrice(row) {
+    let element = row.querySelector('td.price');
+    if (!element) {
+      console.error('Could not scrape item price');
+      return null;
+    }
+    return element.textContent.trim();
+  }
+
+  function getItemTotal(row) {
+    let element = row.querySelector('td.amount');
+    if (!element) {
+      console.error('Could not scrape item total');
+      return null;
+    }
+    return element.textContent.trim();
+  }
 
 	function getShippingTotal() {
-		return $('div.final-price').eq(1).text().substring(4).trim();
+    let elements = document.querySelectorAll('div.final-price');
+    if (!elements || elements.length < 2) {
+      console.error('Could not scrape shipping total');
+      return null;
+    }
+    return elements[1].textContent.substring(4).trim();
 	}
 
 	function getTotal() {
-		return $('div.final-price').eq(2).text().substring(4).trim();
+    let elements = document.querySelectorAll('div.final-price');
+    if (!elements || elements.length < 3) {
+      console.error('Could not scrape total');
+      return null;
+    }
+    return elements[2].textContent.substring(4).trim();
 	}
 
 	function getDiscount() {
-		var lines = $('td.discount-price').html().trim().split('<br');
+    let element = document.querySelector('td.discount-price');
+    if (!element) {
+      return null;
+    }
+    let lines = element.innerHTML.trim().split('<br');
 		if (lines.length < 2) {
 			return null;
 		}
@@ -217,23 +366,56 @@
 	}
 
 	function getRefundedItems() {
-		return $('table#tp-refund-amount-table tbody tr.order-bd').map(function() {
-			return {
-				title: $(this).find('td.baobei div.desc').text().trim(),
-				image: $(this).find('td.baobei a.pic img').attr('src'),
-				total: $(this).find('td.refund-cash').text().trim().substring(4)
-			};
-		}).toArray();
-	}
+    let rows = document.querySelectorAll('table#tp-refund-amount-table tbody tr.order-bd');
+    if (!rows) {
+      return null
+    }
+    let result = [];
+    for (let i = 0; i < rows.length; ++i) {
+      result.push({
+				title: getRefundedItemTitle(rows[i]),
+				image: getRefundedItemImage(rows[i]),
+				total: getRefundedItemTotal(rows[i])
+			});
+    }
+    return result;
+  }
+
+  function getRefundedItemTitle(row) {
+    let element = row.querySelector('td.baobei div.desc');
+    if (!element) {
+      console.error('Could not scrape refunded item title');
+      return null;
+    }
+    return element.textContent.trim();
+  }
+
+  function getRefundedItemImage(row) {
+    let element = row.querySelector('td.baobei a.pic img');
+    if (!element) {
+      console.error('Could not scrape refunded item image');
+      return null;
+    }
+    return element.getAttribute('src');
+  }
+
+  function getRefundedItemTotal(row) {
+    let element = row.querySelector('td.refund-cash');
+    if (!element) {
+      console.error('Could not scrape refunded item total');
+      return null;
+    }
+    return element.textContent.trim().substring(4);
+  }
 
 	function getTax(price) {
 		if (price.match(/\d+,\d+$/)) {
-			return price.replace(/\d+,\d+$/, "0,00")
+			return price.replace(/\d+,\d+$/, "0,00");
 		}
 		if (price.match(/\d+\.\d+$/)) {
-			return price.replace(/\d+\.\d+$/, "0.00")
+			return price.replace(/\d+\.\d+$/, "0.00");
 		}
-		return null
+		return null;
 	}
 
   // Generalized PDF Builder

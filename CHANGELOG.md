@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 Nothing at the moment
 
+## Changed
+
+- Eliminated dependency on jQuery
+
 ## [2.5.1] - 2020-08-27
 
 ### Fixed

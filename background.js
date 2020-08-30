@@ -76,6 +76,6 @@
   }
 
   function getFilenameComponent(string) {
-    return string.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9_-]/gi, '')
+    return string ? string.replace(/^\s+|\s+$/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9_-]/gi, '') : ''
   }
 })()

@@ -5,8 +5,6 @@ websites. At the time of writing this, AliExpress didn't offer any downloadable
 invoice format. For tax reasons, I needed to be able to share the invoices in printed
 form and so I ended up creating this extension.
 
-The website content extraction is in part based on [jQuery].
-
 The PDF generation is based on [PDFKit].
 
 ![](screenshots/onboarding-1.png "Two ways to create the invoice")
@@ -30,7 +28,7 @@ AliExpress Invoice Generator is licensed under the GNU General Public License as
 by the Free Software Foundation, either version 3 of the License, or (at your option) any
 later version.
 
-[jQuery] and [PDFKit] are licensed under the MIT license.
+[PDFKit] is licensed under the MIT license.
 
 [addons.mozilla.org]: https://addons.mozilla.org/en-US/firefox/addon/aliexpress-invoice-generator/
 [jQuery]: https://github.com/jquery/jquery
