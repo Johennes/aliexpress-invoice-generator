@@ -31,6 +31,7 @@
           const url = browser.runtime.getURL("views/onboard.html")
           browser.tabs.create({ url })
         }
+        break
       case 'update':
         {
           const url = browser.runtime.getURL("views/upboard.html")

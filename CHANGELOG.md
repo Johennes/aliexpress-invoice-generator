@@ -12,6 +12,10 @@ Nothing at the moment
 
 - Eliminated dependency on jQuery
 
+## Fixed
+
+- Don't display upboarding page after installing
+
 ## [2.5.1] - 2020-08-27
 
 ### Fixed
