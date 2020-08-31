@@ -6,20 +6,18 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
-Nothing at the moment
-
-## Added
+### Added
 
 - Display warning and error details in generation log on page
 - Include tracking number on invoice
 
-## Changed
+### Changed
 
 - Eliminated dependency on jQuery
 
-## Fixed
+### Fixed
 
-- Don't display upboarding page after installing
+- Don't display upboarding page after installing, only after updating
 
 ## [2.5.1] - 2020-08-27
 
