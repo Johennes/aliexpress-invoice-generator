@@ -95,6 +95,10 @@
 
   // Invoice Data Extraction
 
+  const SEVERITY_NONE = 0;
+  const SEVERITY_WARNING = 1;
+  const SEVERITY_ERROR = 2;
+
   function getContext() {
     let total = getTotal()
     let tax = getTax(total)
@@ -125,12 +129,7 @@
   }
 
   function getOrderNumber() {
-    let element = document.querySelector('.order-no')
-    if (!element) {
-      console.error('Could not scrape order number');
-      return null;
-    }
-    return element.textContent.trim();
+    return getText(document, '.order-no', 'order number', SEVERITY_ERROR);
   }
 
   function getOrderDate() {
@@ -158,76 +157,45 @@
   }
 
   function getOrderDateFromPayment() {
-    let element = document.querySelector('td.pay-c4');
-    if (!element) {
-      return null;
-    }
-    return element.textContent.trim();
+    return getText(document, 'td.pay-c4', 'payment date', SEVERITY_ERROR);
   }
 
   function getStoreName() {
-    let element = document.querySelector('.user-name-text a')
-    if (!element) {
-      console.error('Could not scrape store name');
-      return null;
-    }
-    return element.textContent.trim();
+    return getText(document, '.user-name-text a', 'store name', SEVERITY_ERROR);
   }
 
   function getStoreUrl() {
-    let element = document.querySelector('.user-name-text a')
-    if (!element) {
-      console.error('Could not scrape store URL');
-      return null;
-    }
-    return element.getAttribute('href').replace(/^\/*/, '').replace(/\?.*/, '');
+    let href = getAttribute(document, '.user-name-text a', 'href', 'store URL', SEVERITY_WARNING);
+    return href ? href.replace(/^\/*/, '').replace(/\?.*/, '') : null;
   }
 
   function getBuyerName() {
-    let element = document.querySelector('.user-shipping span[i18entitle="Contact Name"]')
-    if (!element) {
-      console.error('Could not scrape buyer name');
-      return null;
-    }
-    return element.textContent.trim();
+    return getText(document, '.user-shipping span[i18entitle="Contact Name"]', 'buyer name', SEVERITY_ERROR);
   }
 
   function getBuyerStreet1() {
-    let lines = document.querySelectorAll('ul#user-shipping-list li.long')
+    let lines = document.querySelectorAll('ul#user-shipping-list li.long');
     if (!lines || lines.length === 0) {
       console.error('Could not scrape buyer street line 1');
       return null;
     }
-    let span = lines[0].querySelector('span')
-    if (!span) {
-      return lines[0].textContent.trim()
-    }
-    return span.textContent.trim()
+    return getText(lines[0], 'span', 'buyer street line 1', SEVERITY_ERROR);
   }
 
   function getBuyerStreet2() {
-    let lines = document.querySelectorAll('ul#user-shipping-list li.long')
+    let lines = document.querySelectorAll('ul#user-shipping-list li.long');
     if (!lines || lines.length <= 2) {
-      console.warn('Could not scrape buyer street line 2');
       return null;
     }
-    let span = lines[1].querySelector('span')
-    if (!span) {
-      return lines[1].textContent.trim()
-    }
-    return span.textContent.trim()
+    return getText(lines[1], 'span', 'buyer street line 2', SEVERITY_NONE);
   }
 
   function getBuyerCityRegion() {
-    let lines = document.querySelectorAll('ul#user-shipping-list li.long')
+    let lines = document.querySelectorAll('ul#user-shipping-list li.long');
     if (!lines || lines.length <= 1) {
       return null;
     }
-    let span = lines[lines.length - 1].querySelector('span')
-    if (!span) {
-      return lines[lines.length - 1].textContent.trim()
-    }
-    return span.textContent.trim()
+    return getText(lines[lines.length - 1], 'span', 'buyer city/region', SEVERITY_NONE);
   }
 
   function getBuyerCity() {
@@ -253,104 +221,55 @@
   }
 
   function getBuyerZip() {
-    let element = document.querySelector('.user-shipping span[i18entitle="Zip Code"]')
-    if (!element) {
-      console.error('Could not scrape buyer zip');
-      return null;
-    }
-    return element.textContent.trim();
+    return getText(document, '.user-shipping span[i18entitle="Zip Code"]', 'buyer zip', SEVERITY_ERROR);
   }
 
   function getItems() {
-    let rows = document.querySelectorAll('table#TP_ProductTable tr.order-bd')
-    if (!rows) {
-      console.error('Could not scrape items');
-      return null;
-    }
-    let result = [];
-    for (let i = 0; i < rows.length; ++i) {
-      result.push({
-        title: getItemTitle(rows[i]),
-        subtitle: getItemSubtitle(rows[i]),
-        image: getItemImage(rows[i]),
-        amount: getItemAmount(rows[i]),
-        price: getItemPrice(rows[i]),
-        total: getItemTotal(rows[i])
-      });
-    }
-    return result;
+    return forAllElements(document, 'table#TP_ProductTable tr.order-bd', 'items', SEVERITY_ERROR, (row, index) => {
+      return {
+        title: getItemTitle(row),
+        subtitle: getItemSubtitle(row),
+        image: getItemImage(row),
+        amount: getItemAmount(row),
+        price: getItemPrice(row),
+        total: getItemTotal(row)
+      };
+    });
   }
 
   function getItemTitle(row) {
-    let element = row.querySelector('td.baobei a.baobei-name');
-    if (!element) {
-      console.error('Could not scrape item title');
-      return null;
-    }
-    return element.textContent.trim();
+    return getText(row, 'td.baobei a.baobei-name', 'item title', SEVERITY_ERROR);
   }
 
   function getItemSubtitle(row) {
-    let element = row.querySelector('td.baobei div.spec');
-    if (!element) {
-      console.error('Could not scrape item subtitle');
-      return null;
-    }
-    return element.textContent.trim().replace(/\s\s+/g, ' ');
+    let text = getText(row, 'td.baobei div.spec', 'item subtitle', SEVERITY_WARNING)
+    return text ? text.replace(/\s\s+/g, ' ') : null;
   }
 
   function getItemImage(row) {
-    let element = row.querySelector('td.baobei a.pic img');
-    if (!element) {
-      console.error('Could not scrape item image');
-      return null;
-    }
-    return element.getAttribute('src');
+    return getAttribute(row, 'td.baobei a.pic img', 'src', 'item image', SEVERITY_NONE);
   }
 
   function getItemAmount(row) {
-    let element = row.querySelector('td.quantity');
-    if (!element) {
-      console.error('Could not scrape item amount');
-      return null;
-    }
-    return element.textContent.trim();
+    return getText(row, 'td.quantity', 'item amount', SEVERITY_ERROR);
   }
 
   function getItemPrice(row) {
-    let element = row.querySelector('td.price');
-    if (!element) {
-      console.error('Could not scrape item price');
-      return null;
-    }
-    return element.textContent.trim();
+    return getText(row, 'td.price', 'item price', SEVERITY_ERROR);
   }
 
   function getItemTotal(row) {
-    let element = row.querySelector('td.amount');
-    if (!element) {
-      console.error('Could not scrape item total');
-      return null;
-    }
-    return element.textContent.trim();
+    return getText(row, 'td.amount', 'item total', SEVERITY_ERROR);
   }
 
   function getShippingTotal() {
-    let elements = document.querySelectorAll('div.final-price');
-    if (!elements || elements.length < 2) {
-      console.error('Could not scrape shipping total');
-      return null;
-    }
-    return elements[1].textContent.substring(4).trim();
+    let element = getNthElement(document, 'div.final-price', 1, 'shipping total', SEVERITY_ERROR);
+    return element ? element.textContent.substring(4).trim() : null;
   }
 
   function getTotal() {
-    let elements = document.querySelectorAll('div.final-price');
-    if (!elements || elements.length < 3) {
-      console.error('Could not scrape total');
-      return null;
-    }
-    return elements[2].textContent.substring(4).trim();
+    let element = getNthElement(document, 'div.final-price', 2, 'total', SEVERITY_ERROR);
+    return element ? element.textContent.substring(4).trim() : null;
   }
 
   function getDiscount() {
@@ -366,46 +285,26 @@
   }
 
   function getRefundedItems() {
-    let rows = document.querySelectorAll('table#tp-refund-amount-table tbody tr.order-bd');
-    if (!rows) {
-      return null
-    }
-    let result = [];
-    for (let i = 0; i < rows.length; ++i) {
-      result.push({
-        title: getRefundedItemTitle(rows[i]),
-        image: getRefundedItemImage(rows[i]),
-        total: getRefundedItemTotal(rows[i])
-      });
-    }
-    return result;
+    return forAllElements(document, 'table#tp-refund-amount-table tbody tr.order-bd', 'refunded items', SEVERITY_NONE, (row, index) => {
+      return {
+        title: getRefundedItemTitle(row),
+        image: getRefundedItemImage(row),
+        total: getRefundedItemTotal(row)
+      };
+    });
   }
 
   function getRefundedItemTitle(row) {
-    let element = row.querySelector('td.baobei div.desc');
-    if (!element) {
-      console.error('Could not scrape refunded item title');
-      return null;
-    }
-    return element.textContent.trim();
+    return getText(row, 'td.baobei div.desc', 'refunded item title', SEVERITY_ERROR);
   }
 
   function getRefundedItemImage(row) {
-    let element = row.querySelector('td.baobei a.pic img');
-    if (!element) {
-      console.error('Could not scrape refunded item image');
-      return null;
-    }
-    return element.getAttribute('src');
+    return getAttribute(row, 'td.baobei a.pic img', 'src', 'refunded item image', SEVERITY_NONE);
   }
 
   function getRefundedItemTotal(row) {
-    let element = row.querySelector('td.refund-cash');
-    if (!element) {
-      console.error('Could not scrape refunded item total');
-      return null;
-    }
-    return element.textContent.trim().substring(4);
+    let text = getText(row, 'td.refund-cash', 'refunded item total', SEVERITY_ERROR)
+    return text ? text.substring(4) : null;
   }
 
   function getTax(price) {
@@ -416,6 +315,59 @@
       return price.replace(/\d+\.\d+$/, "0.00");
     }
     return null;
+  }
+
+  function forAllElements(parent, selector, description, severity, map) {
+    let elements = parent.querySelectorAll(selector);
+    if (!elements) {
+      if (severity === SEVERITY_ERROR) {
+        console.error(`Could not scrape ${description}`);
+      } else if (severity === SEVERITY_WARNING) {
+        console.warn(`Could not scrape ${description}`);
+      }
+      return null;
+    }
+    let result = [];
+    for (let i = 0; i < elements.length; ++i) {
+      result.push(map(elements[i], i));
+    }
+    return result;
+  }
+
+  function getNthElement(parent, selector, n, description, severity) {
+    let elements = parent.querySelectorAll(selector);
+    if (!elements || elements.length < n + 1) {
+      if (severity === SEVERITY_ERROR) {
+        console.error(`Could not scrape ${description}`);
+      } else if (severity === SEVERITY_WARNING) {
+        console.warn(`Could not scrape ${description}`);
+      }
+      return null;
+    }
+    return elements[n];
+  }
+
+  function getElement(parent, selector, description, severity) {
+    let element = parent.querySelector(selector);
+    if (!element) {
+      if (severity === SEVERITY_ERROR) {
+        console.error(`Could not scrape ${description}`);
+      } else if (severity === SEVERITY_WARNING) {
+        console.warn(`Could not scrape ${description}`);
+      }
+      return null;
+    }
+    return element;
+  }
+
+  function getText(parent, selector, description, required) {
+    let element = getElement(parent, selector, description, required);
+    return element ? element.textContent.trim() : null;
+  }
+
+  function getAttribute(parent, selector, attribute, description, required) {
+    let element = getElement(parent, selector, description, required);
+    return element ? element.getAttribute(attribute) : null;
   }
 
   // Generalized PDF Builder
