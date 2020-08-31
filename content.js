@@ -165,6 +165,9 @@
         city: getBuyerCity(),
         region: getBuyerRegion()
       },
+      logistics: {
+        trackingNumber: getTrackingNumber()
+      },
       items: getItems(),
       shipping: getShippingTotal(),
       discount: getDiscount(),
@@ -268,6 +271,10 @@
 
   function getBuyerZip() {
     return getText(document, '.user-shipping span[i18entitle="Zip Code"]', 'buyer zip', SEVERITY_ERROR);
+  }
+
+  function getTrackingNumber() {
+    return getText(document, '.logistics-num', 'tracking number', SEVERITY_WARNING);
   }
 
   function getItems() {
@@ -797,6 +804,24 @@
           }
           return options
         })
+
+      builder.pushYOffset()
+    }
+
+    if (context.logistics.trackingNumber) {
+      builder.setFont(boldFont)
+      builder.setFontSize(baseFontSize * 1.15)
+      builder.addText('Logistics', 0, 18, {
+        align: 'left'
+      })
+
+      builder.pushYOffset()
+
+      builder.setFont(regularFont)
+      builder.setFontSize(baseFontSize)
+      builder.addText(`Tracking number: ${context.logistics.trackingNumber}`, 0, 3, {
+        align: 'left'
+      })
 
       builder.pushYOffset()
     }

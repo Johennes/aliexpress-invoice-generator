@@ -11,6 +11,7 @@ Nothing at the moment
 ## Added
 
 - Display warning and error details in generation log on page
+- Include tracking number on invoice
 
 ## Changed
 
