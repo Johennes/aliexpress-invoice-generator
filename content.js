@@ -17,7 +17,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 (function() {
+  const messageContainerId = '_aig-message-container'
+
   addButtons()
+  addMessageContainer()
 
   // Explicit call to browser.pageAction.show needed in Chrome. Trigger it from
   // here to avoid requesting the tabs permission.
@@ -71,6 +74,7 @@
   }
 
   async function storePdf() {
+    clearMessages()
     let settings = await loadSettings()
     let context = getContext()
     let chunks = await createPdf(settings, context)
@@ -93,11 +97,53 @@
     })
   }
 
-  // Invoice Data Extraction
+  // Log messages
 
   const SEVERITY_NONE = 0;
   const SEVERITY_WARNING = 1;
   const SEVERITY_ERROR = 2;
+
+  function addMessageContainer() {
+    let parent = document.querySelector('.order-operate');
+    if (!parent) {
+      console.error('Could not find parent for message container');
+      return;
+    }
+
+    let container = document.createElement('div');
+    container.setAttribute('id', messageContainerId);
+    container.style.border = '1px solid #e62e04'
+    container.style.padding = '1ex'
+    container.style.marginTop = '1ex'
+    container.style.display = 'none'
+    parent.appendChild(container);
+  }
+
+  function clearMessages() {
+    let container = document.querySelector(`#${messageContainerId}`)
+    if (container) {
+      container.innerHTML = '<b>Invoice generation log</b>'
+      container.style.display = 'none'
+    }
+  }
+
+  function recordMessage(message, severity) {
+    if (severity === SEVERITY_ERROR) {
+      console.error(message);
+    } else if (severity === SEVERITY_WARNING) {
+      console.warn(message);
+    } else if (severity === SEVERITY_NONE) {
+      console.log(message);
+    }
+
+    let container = document.querySelector(`#${messageContainerId}`)
+    if (container) {
+      container.innerHTML += `<br/>${message}`
+      container.style.display = 'block'
+    }
+  }
+
+  // Invoice Data Extraction
 
   function getContext() {
     let total = getTotal()
@@ -138,7 +184,7 @@
       date = getOrderDateFromPayment();
     }
     if (!date) {
-      console.error('Could not scrape order date');
+      recordMessage('Could not scrape order date', SEVERITY_ERROR);
       return null;
     }
     return date;
@@ -176,7 +222,7 @@
   function getBuyerStreet1() {
     let lines = document.querySelectorAll('ul#user-shipping-list li.long');
     if (!lines || lines.length === 0) {
-      console.error('Could not scrape buyer street line 1');
+      recordMessage('Could not scrape buyer street line 1', SEVERITY_ERROR);
       return null;
     }
     return getText(lines[0], 'span', 'buyer street line 1', SEVERITY_ERROR);
@@ -201,7 +247,7 @@
   function getBuyerCity() {
     let cityRegion = getBuyerCityRegion();
     if (!cityRegion) {
-      console.error('Could not scrape buyer city');
+      recordMessage('Could not scrape buyer city', SEVERITY_ERROR);
       return null;
     }
     let elements = cityRegion.split(',').map(function(element) { return element.trim() });
@@ -212,7 +258,7 @@
   function getBuyerRegion() {
     let cityRegion = getBuyerCityRegion();
     if (!cityRegion) {
-      console.error('Could not scrape buyer region');
+      recordMessage('Could not scrape buyer region', SEVERITY_ERROR);
       return null;
     }
     let elements = cityRegion.split(',').map(function(element) { return element.trim() });
@@ -320,11 +366,7 @@
   function forAllElements(parent, selector, description, severity, map) {
     let elements = parent.querySelectorAll(selector);
     if (!elements) {
-      if (severity === SEVERITY_ERROR) {
-        console.error(`Could not scrape ${description}`);
-      } else if (severity === SEVERITY_WARNING) {
-        console.warn(`Could not scrape ${description}`);
-      }
+      recordMessage(`Could not scrape ${description}`, severity);
       return null;
     }
     let result = [];
@@ -337,11 +379,7 @@
   function getNthElement(parent, selector, n, description, severity) {
     let elements = parent.querySelectorAll(selector);
     if (!elements || elements.length < n + 1) {
-      if (severity === SEVERITY_ERROR) {
-        console.error(`Could not scrape ${description}`);
-      } else if (severity === SEVERITY_WARNING) {
-        console.warn(`Could not scrape ${description}`);
-      }
+      recordMessage(`Could not scrape ${description}`, severity);
       return null;
     }
     return elements[n];
@@ -350,11 +388,7 @@
   function getElement(parent, selector, description, severity) {
     let element = parent.querySelector(selector);
     if (!element) {
-      if (severity === SEVERITY_ERROR) {
-        console.error(`Could not scrape ${description}`);
-      } else if (severity === SEVERITY_WARNING) {
-        console.warn(`Could not scrape ${description}`);
-      }
+      recordMessage(`Could not scrape ${description}`, severity);
       return null;
     }
     return element;

@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 Nothing at the moment
 
+## Added
+
+- Display warning and error details in generation log on page
+
 ## Changed
 
 - Eliminated dependency on jQuery
