@@ -487,7 +487,7 @@
       return pdfImage.height
     }
 
-    addText(text, x, y, options) {
+    addText(text, x, y, options, color) {
       // Appears to be needed occasionally to get the height computation right
       if (!options.hasOwnProperty('width')) {
         options.width = this.doc.page.width - 2 * this.margin
@@ -501,7 +501,7 @@
         yOffset = 0
       }
 
-      this.doc.text(this.sanitize(text), x + this.margin, yOffset + this.yOffset, options)
+      this.doc.fillColor(color ? color : '#000').text(this.sanitize(text), x + this.margin, yOffset + this.yOffset, options)
       this.yMax = Math.max(this.yMax, yOffset + height)
     }
 
@@ -510,8 +510,8 @@
         .replace('\uFFE1', '\u00A3') // Use regular instead of full-width Pound sign, the latter may not be contained in all fonts
     }
 
-    addTable(rows, y, rowSpacing, columnSpacing, getHLine, getFont, getFontSize, getOptions) {
-      let lineObjects = this.createLineObjects(rows, getFont, getFontSize, getOptions)
+    addTable(rows, y, rowSpacing, columnSpacing, getHLine, getFont, getFontSize, getOptions, getColor) {
+      let lineObjects = this.createLineObjects(rows, getFont, getFontSize, getOptions, getColor)
       let columnWidths = this.computeColumnWidths(lineObjects, columnSpacing)
 
       let yOffset = y
@@ -553,7 +553,7 @@
             let line = lineObjects[i][j][k]
             this.doc.font(line.font)
             this.doc.fontSize(line.fontSize)
-            this.addText(line.text, xOffset, cellOffset, line.options)
+            this.addText(line.text, xOffset, cellOffset, line.options, line.color)
             cellOffset += this.doc.heightOfString(line.text, line.options)
           }
           xOffset += columnWidths[j] + columnSpacing
@@ -571,7 +571,7 @@
       }
     }
 
-    createLineObjects(rows, getFont, getFontSize, getOptions) {
+    createLineObjects(rows, getFont, getFontSize, getOptions, getColor) {
       return rows.map((row, i) => {
         return row.map((cell, j) => {
           let lines = Array.isArray(cell) ? cell : [cell]
@@ -580,7 +580,8 @@
               text: line,
               font: getFont(i, j, k),
               fontSize: getFontSize(i, j, k),
-              options: getOptions(i, j, k)
+              options: getOptions(i, j, k),
+              color: getColor ? getColor(i, j, k) : null
             }
           })
         })
@@ -747,6 +748,12 @@
           options.align = 'right'
         }
         return options
+      },
+      (i, j, k) => {
+        if (i !== 0 && j === 0 && k > 0) {
+          return '#444'
+        }
+        return null
       })
 
     builder.pushYOffset()
