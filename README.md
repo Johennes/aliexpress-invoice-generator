@@ -28,8 +28,9 @@ AliExpress Invoice Generator is licensed under the GNU General Public License as
 by the Free Software Foundation, either version 3 of the License, or (at your option) any
 later version.
 
-[PDFKit] is licensed under the MIT license.
+[PDFKit] is distributed under the MIT license.
+
+The Droid Sans fonts are distributed under the Apache license.
 
 [addons.mozilla.org]: https://addons.mozilla.org/en-US/firefox/addon/aliexpress-invoice-generator/
-[jQuery]: https://github.com/jquery/jquery
 [PDFKit]: https://github.com/foliojs/pdfkit

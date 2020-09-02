@@ -32,9 +32,8 @@
   },
   "web_accessible_resources": [
     "aliexpress.png",
-    "fonts/OpenSans-Bold.ttf",
-    "fonts/OpenSans-Light.ttf",
-    "fonts/OpenSans-Regular.ttf",
+    "fonts/DroidSansFallback.ttf",
+    "fonts/DroidSans-Bold.ttf",
     "icons/icon-128.png",
     "screenshots/onboarding-1.png",
     "screenshots/onboarding-1-chrome.png",

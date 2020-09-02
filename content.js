@@ -166,6 +166,7 @@
         region: getBuyerRegion()
       },
       logistics: {
+        shippingCompany: getShippingCompany(),
         trackingNumber: getTrackingNumber()
       },
       items: getItems(),
@@ -271,6 +272,10 @@
 
   function getBuyerZip() {
     return getText(document, '.user-shipping span[i18entitle="Zip Code"]', 'buyer zip', SEVERITY_ERROR);
+  }
+
+  function getShippingCompany() {
+    return getText(document, '.logistics-name', 'shipping company', SEVERITY_WARNING);
   }
 
   function getTrackingNumber() {
@@ -629,10 +634,9 @@
   // Invoice PDF Creation
 
   async function createPdf(settings, context) {
-    let font = 'OpenSans'
-    let lightFont = `${font}-Light`
-    let regularFont = `${font}-Regular`
-    let boldFont = `${font}-Bold`
+    let lightFont = `DroidSansFallback`
+    let regularFont = `DroidSansFallback`
+    let boldFont = `DroidSans-Bold`
     let baseFontSize = 10
 
     let builder = new PdfBuilder(settings.pageSize, 72)
@@ -808,7 +812,7 @@
       builder.pushYOffset()
     }
 
-    if (context.logistics.trackingNumber) {
+    if (context.logistics.shippingCompany || context.logistics.trackingNumber) {
       builder.setFont(boldFont)
       builder.setFontSize(baseFontSize * 1.15)
       builder.addText('Logistics', 0, 18, {
@@ -817,13 +821,25 @@
 
       builder.pushYOffset()
 
-      builder.setFont(regularFont)
-      builder.setFontSize(baseFontSize)
-      builder.addText(`Tracking number: ${context.logistics.trackingNumber}`, 0, 3, {
-        align: 'left'
-      })
+      if (context.logistics.shippingCompany) {
+        builder.setFont(regularFont)
+        builder.setFontSize(baseFontSize)
+        builder.addText(`Shipping company: ${context.logistics.shippingCompany}`, 0, 3, {
+          align: 'left'
+        })
 
-      builder.pushYOffset()
+        builder.pushYOffset()
+      }
+
+      if (context.logistics.trackingNumber) {
+        builder.setFont(regularFont)
+        builder.setFontSize(baseFontSize)
+        builder.addText(`Tracking number: ${context.logistics.trackingNumber}`, 0, 3, {
+          align: 'left'
+        })
+
+        builder.pushYOffset()
+      }
     }
 
     builder.setFont(regularFont)

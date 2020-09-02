@@ -9,11 +9,12 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 ### Added
 
 - Display warning and error details in generation log on page
-- Include tracking number on invoice
+- Include shipping company and tracking number on invoice (if available)
 
 ### Changed
 
 - Eliminated dependency on jQuery
+- Switch to Droid Sans Fallback to support Asian characters
 
 ### Fixed
 
