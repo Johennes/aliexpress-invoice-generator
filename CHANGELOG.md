@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
+Nothing at the moment
+
+## [2.6.0] - 2020-09-02
+
 ### Added
 
 - Display warning and error details in generation log on page
@@ -13,7 +17,7 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ### Changed
 
-- Eliminated dependency on jQuery
+- Eliminate dependency on jQuery
 - Switch to Droid Sans Fallback to support Asian characters
 
 ### Fixed
@@ -116,7 +120,8 @@ Initial release
 
 [Keep a Changelog]: https://keepachangelog.com/en/1.0.0/
 [Semantic Versioning]: https://semver.org/spec/v2.0.0.html
-[Unreleased]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.5.1...master
+[Unreleased]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.6.0...master
+[2.6.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.5.1...2.6.0
 [2.5.1]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.5.0...2.5.1
 [2.5.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.4.0...2.5.0
 [2.4.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.3.0...2.4.0
