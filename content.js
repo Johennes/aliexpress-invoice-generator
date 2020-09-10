@@ -134,6 +134,7 @@
       console.warn(message);
     } else if (severity === SEVERITY_NONE) {
       console.log(message);
+      return
     }
 
     let container = document.querySelector(`#${messageContainerId}`)
@@ -301,7 +302,7 @@
   }
 
   function getItemSubtitle(row) {
-    let text = getText(row, 'td.baobei div.spec', 'item subtitle', SEVERITY_WARNING)
+    let text = getText(row, 'td.baobei div.spec', 'item subtitle', SEVERITY_NONE)
     return text ? text.replace(/\s\s+/g, ' ') : null;
   }
 
@@ -407,13 +408,13 @@
     return element;
   }
 
-  function getText(parent, selector, description, required) {
-    let element = getElement(parent, selector, description, required);
+  function getText(parent, selector, description, severity) {
+    let element = getElement(parent, selector, description, severity);
     return element ? element.textContent.trim() : null;
   }
 
-  function getAttribute(parent, selector, attribute, description, required) {
-    let element = getElement(parent, selector, description, required);
+  function getAttribute(parent, selector, attribute, description, severity) {
+    let element = getElement(parent, selector, description, severity);
     return element ? element.getAttribute(attribute) : null;
   }
 

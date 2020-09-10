@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 Nothing at the moment
 
+### Changed
+
+- Exclude messages about missing optional data from the generation log
+
 ### Fixed
 
 - Invoice generation fails on some orders when items are missing a subtitle
