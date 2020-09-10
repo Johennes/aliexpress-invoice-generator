@@ -10,7 +10,8 @@ Nothing at the moment
 
 ### Fixed
 
-- Invoice generation failed on some orders when items were missing a subtitle
+- Invoice generation fails on some orders when items are missing a subtitle
+- Multiple tracking numbers wrap on several lines
 
 ## [2.6.0] - 2020-09-02
 

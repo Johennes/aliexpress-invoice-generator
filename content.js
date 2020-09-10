@@ -275,11 +275,12 @@
   }
 
   function getShippingCompany() {
-    return getText(document, '.logistics-name', 'shipping company', SEVERITY_WARNING);
+    return getText(document, '.logistics-name', 'shipping company', SEVERITY_WARNING)
   }
 
   function getTrackingNumber() {
-    return getText(document, '.logistics-num', 'tracking number', SEVERITY_WARNING);
+    let text = getText(document, '.logistics-num', 'tracking number', SEVERITY_WARNING)
+    return text ? text.replace('\n', ', ') : null
   }
 
   function getItems() {
