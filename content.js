@@ -728,7 +728,13 @@
     builder.pushYOffset()
 
     let itemRows = [["Article", "Amount", "Price", "Total"]].concat(
-      context.items.map(item => [[item.title, item.subtitle], item.amount, item.price, item.total]))
+      context.items.map(item => {
+        let titles = [item.title]
+        if (item.subtitle) {
+          titles.push(item.subtitle)
+        }
+        return [titles, item.amount, item.price, item.total]
+      }))
 
     builder.addTable(itemRows, 9, 6, 6,
       (i) => {

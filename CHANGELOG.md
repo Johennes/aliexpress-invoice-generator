@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 Nothing at the moment
 
+### Fixed
+
+- Invoice generation failed on some orders when items were missing a subtitle
+
 ## [2.6.0] - 2020-09-02
 
 ### Added
