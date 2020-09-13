@@ -175,6 +175,7 @@
       discount: getDiscount(),
       tax: tax,
       total: total,
+      payment: getPayment(),
       refundedItems: getRefundedItems()
     };
   }
@@ -293,43 +294,43 @@
         amount: getItemAmount(row),
         price: getItemPrice(row),
         total: getItemTotal(row)
-      };
-    });
+      }
+    })
   }
 
   function getItemTitle(row) {
-    return getText(row, 'td.baobei a.baobei-name', 'item title', SEVERITY_ERROR);
+    return getText(row, 'td.baobei a.baobei-name', 'item title', SEVERITY_ERROR)
   }
 
   function getItemSubtitle(row) {
     let text = getText(row, 'td.baobei div.spec', 'item subtitle', SEVERITY_NONE)
-    return text ? text.replace(/\s\s+/g, ' ') : null;
+    return text ? text.replace(/\s\s+/g, ' ') : null
   }
 
   function getItemImage(row) {
-    return getAttribute(row, 'td.baobei a.pic img', 'src', 'item image', SEVERITY_NONE);
+    return getAttribute(row, 'td.baobei a.pic img', 'src', 'item image', SEVERITY_NONE)
   }
 
   function getItemAmount(row) {
-    return getText(row, 'td.quantity', 'item amount', SEVERITY_ERROR);
+    return getText(row, 'td.quantity', 'item amount', SEVERITY_ERROR)
   }
 
   function getItemPrice(row) {
-    return getText(row, 'td.price', 'item price', SEVERITY_ERROR);
+    return getText(row, 'td.price', 'item price', SEVERITY_ERROR)
   }
 
   function getItemTotal(row) {
-    return getText(row, 'td.amount', 'item total', SEVERITY_ERROR);
+    return getText(row, 'td.amount', 'item total', SEVERITY_ERROR)
   }
 
   function getShippingTotal() {
     let element = getNthElement(document, 'div.final-price', 1, 'shipping total', SEVERITY_ERROR);
-    return element ? element.textContent.replace(/^[a-zA-Z]*/, '').trim() : null;
+    return element ? normalizePrice(element.textContent) : null
   }
 
   function getTotal() {
     let element = getNthElement(document, 'div.final-price', 2, 'total', SEVERITY_ERROR);
-    return element ? element.textContent.replace(/^[a-zA-Z]*/, '').trim() : null;
+    return element ? normalizePrice(element.textContent) : null
   }
 
   function getDiscount() {
@@ -342,6 +343,28 @@
       return null;
     }
     return lines[1].replace(/^[\/>\s]+/g, '').substring(4).trim();
+  }
+
+  function getPayment() {
+    return forAllElements(document, 'table#tp-buyer-order-table tbody tr', 'payment', SEVERITY_WARNING, (row, index) => {
+      return {
+        amount: getPaymentAmount(row),
+        title: getPaymentTitle(row)
+      }
+    })
+  }
+
+  function getPaymentAmount(row) {
+    let text = getText(row, 'td.pay-c1', 'payment amount', SEVERITY_ERROR)
+    return text ? normalizePrice(text) : null
+  }
+
+  function getPaymentTitle(row) {
+    return getText(row, 'td.pay-c3', 'payment title', SEVERITY_ERROR)
+  }
+
+  function normalizePrice(price) {
+    return price.replace(/^[a-zA-Z]*/, '').trim()
   }
 
   function getRefundedItems() {
@@ -512,9 +535,9 @@
         .replace('\uFFE1', '\u00A3') // Use regular instead of full-width Pound sign, the latter may not be contained in all fonts
     }
 
-    addTable(rows, y, rowSpacing, columnSpacing, getHLine, getFont, getFontSize, getOptions, getColor) {
+    addTable(rows, y, rowSpacing, columnSpacing, columnToExpand, getHLine, getFont, getFontSize, getOptions, getColor) {
       let lineObjects = this.createLineObjects(rows, getFont, getFontSize, getOptions, getColor)
-      let columnWidths = this.computeColumnWidths(lineObjects, columnSpacing)
+      let columnWidths = this.computeColumnWidths(lineObjects, columnSpacing, columnToExpand)
 
       let yOffset = y
       for (let i = 0; i < lineObjects.length; ++i) {
@@ -590,7 +613,7 @@
       })
     }
 
-    computeColumnWidths(lineObjects, spacing) {
+    computeColumnWidths(lineObjects, spacing, columnToExpand) {
       // Compute maximum width per column
       let maxWidths = null
       for (let i = 0; i < lineObjects.length; ++i) {
@@ -612,12 +635,12 @@
           maxWidths = maxWidths.map((width, index) => Math.max(width, rowWidths[index]))
         }
       }
-      // Shrink first column until table fits page width
+      // Expand and shrink column until table fits page width
       let columnWidths = maxWidths
-      columnWidths[0] = this.doc.page.width - 2 * this.margin
+      columnWidths[columnToExpand] = this.doc.page.width - 2 * this.margin
       for (let i = 0; i < columnWidths.length; ++i) {
-        if (i != 0) {
-          columnWidths[0] -= columnWidths[i] + spacing
+        if (i !== columnToExpand) {
+          columnWidths[columnToExpand] -= columnWidths[i] + spacing
         }
       }
 
@@ -738,7 +761,7 @@
         return [titles, item.amount, item.price, item.total]
       }))
 
-    builder.addTable(itemRows, 9, 6, 6,
+    builder.addTable(itemRows, 9, 6, 6, 0,
       (i) => {
         return i === 1 || i === itemRows.length
       },
@@ -774,7 +797,7 @@
       totalRows.splice(1, 0, ["Discount", `- ${context.discount}`])
     }
 
-    builder.addTable(totalRows, 9, 6, 6,
+    builder.addTable(totalRows, 9, 6, 6, 0,
       (i) => {
         return false
       },
@@ -792,35 +815,30 @@
 
     builder.pushYOffset()
 
-    if (context.refundedItems.length) {
+    if (context.payment && context.payment.length) {
       builder.setFont(boldFont)
       builder.setFontSize(baseFontSize * 1.15)
-      builder.addText('Refund Information', 0, 18, {
+      builder.addText('Payment', 0, 18, {
         align: 'left'
       })
 
       builder.pushYOffset()
 
-      let refundedItemRows = [["Article", "Refund"]].concat(
-        context.refundedItems.map(item => [item.title, item.total]))
+      let paymentRows = context.payment.map(item => { return [item.amount, item.title] })
 
-      builder.addTable(refundedItemRows, 9, 6, 6,
+      builder.addTable(paymentRows, 3, 6, 6, 1,
         (i) => {
-          return i === 1
+          return false
         },
         (i, j, k) => {
-          return i === 0 ? boldFont : regularFont
+          return regularFont
         },
         (i, j, k) => {
           return baseFontSize
         },
         (i, j, k) => {
           let options = {}
-          if (j === 0) {
-            options.align = 'left'
-          } else {
-            options.align = 'right'
-          }
+          options.align = 'left'
           return options
         })
 
@@ -855,6 +873,41 @@
 
         builder.pushYOffset()
       }
+    }
+
+    if (context.refundedItems && context.refundedItems.length) {
+      builder.setFont(boldFont)
+      builder.setFontSize(baseFontSize * 1.15)
+      builder.addText('Refund Information', 0, 18, {
+        align: 'left'
+      })
+
+      builder.pushYOffset()
+
+      let refundedItemRows = [["Article", "Refund"]].concat(
+        context.refundedItems.map(item => [item.title, item.total]))
+
+      builder.addTable(refundedItemRows, 9, 6, 6, 0,
+        (i) => {
+          return i === 1
+        },
+        (i, j, k) => {
+          return i === 0 ? boldFont : regularFont
+        },
+        (i, j, k) => {
+          return baseFontSize
+        },
+        (i, j, k) => {
+          let options = {}
+          if (j === 0) {
+            options.align = 'left'
+          } else {
+            options.align = 'right'
+          }
+          return options
+        })
+
+      builder.pushYOffset()
     }
 
     builder.setFont(regularFont)

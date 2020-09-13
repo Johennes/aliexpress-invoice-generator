@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
+### Added
+
+- Add payment breakdown (including coupons)
+
 ### Fixed
 
 - Correctly parse US$ total / shipping
