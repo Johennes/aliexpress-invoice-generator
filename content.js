@@ -324,12 +324,12 @@
 
   function getShippingTotal() {
     let element = getNthElement(document, 'div.final-price', 1, 'shipping total', SEVERITY_ERROR);
-    return element ? element.textContent.substring(4).trim() : null;
+    return element ? element.textContent.replace(/^[a-zA-Z]*/, '').trim() : null;
   }
 
   function getTotal() {
     let element = getNthElement(document, 'div.final-price', 2, 'total', SEVERITY_ERROR);
-    return element ? element.textContent.substring(4).trim() : null;
+    return element ? element.textContent.replace(/^[a-zA-Z]*/, '').trim() : null;
   }
 
   function getDiscount() {

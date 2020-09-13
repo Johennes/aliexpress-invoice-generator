@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
-Nothing at the moment
+### Fixed
+
+- Correctly parse US$ total / shipping
 
 ## [2.6.1] - 2020-09-10
 
