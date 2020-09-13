@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
+Nothing at the moment
+
+## [2.7.0] - 2020-09-13
+
 ### Added
 
 - Add payment breakdown (including coupons)
@@ -137,7 +141,8 @@ Initial release
 
 [Keep a Changelog]: https://keepachangelog.com/en/1.0.0/
 [Semantic Versioning]: https://semver.org/spec/v2.0.0.html
-[Unreleased]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.6.1...master
+[Unreleased]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.7.0...master
+[2.7.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.6.1...2.7.0
 [2.6.1]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.6.0...2.6.1
 [2.6.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.5.1...2.6.0
 [2.5.1]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.5.0...2.5.1
