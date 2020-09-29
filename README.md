@@ -1,6 +1,6 @@
 # AliExpress Invoice Generator
 
-*Mirrors: [GitHub] [GitLab]*
+*Mirrors: [GitHub] ~ [GitLab]*
 
 This is a Browser extension for generating PDF invoices from AliExpress order detail
 websites. At the time of writing this, AliExpress didn't offer any downloadable
