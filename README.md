@@ -1,6 +1,8 @@
 # AliExpress Invoice Generator
 
-This is a Firefox extension for generating PDF invoices from AliExpress order detail
+*Mirrors: [GitHub] [GitLab]*
+
+This is a Browser extension for generating PDF invoices from AliExpress order detail
 websites. At the time of writing this, AliExpress didn't offer any downloadable
 invoice format. For tax reasons, I needed to be able to share the invoices in printed
 form and so I ended up creating this extension.
@@ -15,7 +17,8 @@ The PDF generation is based on [PDFKit].
 
 ## Installing
 
-You can install the extension directly from the official [addons.mozilla.org] website.
+You can install the extension directly from the official [addons.mozilla.org] website
+or from the [Chrome Web Store].
 
 ## Running (from Code)
 
@@ -32,5 +35,8 @@ later version.
 
 The Droid Sans fonts are distributed under the Apache license.
 
-[addons.mozilla.org]: https://addons.mozilla.org/en-US/firefox/addon/aliexpress-invoice-generator/
+[addons.mozilla.org]: https://addons.mozilla.org/firefox/addon/aliexpress-invoice-generator/
+[Chrome Web Store]: https://chrome.google.com/webstore/detail/haebneihcbnfnhbdpokdbkekepnoiadn
+[GitHub]: https://github.com/Johennes/aliexpress-invoice-generator
+[GitLab]: https://gitlab.com/cherrypicker/aliexpress-invoice-generator
 [PDFKit]: https://github.com/foliojs/pdfkit
