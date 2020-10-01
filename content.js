@@ -289,7 +289,7 @@
     return forAllElements(document, 'table#TP_ProductTable tr.order-bd', 'items', SEVERITY_ERROR, (row, index) => {
       return {
         title: getItemTitle(row),
-        subtitle: getItemSubtitle(row),
+        specs: getItemSpecs(row),
         image: getItemImage(row),
         amount: getItemAmount(row),
         price: getItemPrice(row),
@@ -302,9 +302,11 @@
     return getText(row, 'td.baobei a.baobei-name', 'item title', SEVERITY_ERROR)
   }
 
-  function getItemSubtitle(row) {
-    let text = getText(row, 'td.baobei div.spec', 'item subtitle', SEVERITY_NONE)
-    return text ? text.replace(/\s\s+/g, ' ') : null
+  function getItemSpecs(row) {
+    return forAllElements(row, 'td.baobei div.spec', 'item specifications', SEVERITY_NONE, (element, index) => {
+      let text = element.textContent.trim()
+      return text ? text.replace(/\s\s+/g, ' ') : null
+    })
   }
 
   function getItemImage(row) {
@@ -755,8 +757,8 @@
     let itemRows = [["Article", "Amount", "Price", "Total"]].concat(
       context.items.map(item => {
         let titles = [item.title]
-        if (item.subtitle) {
-          titles.push(item.subtitle)
+        if (item.specs) {
+          titles.push(item.specs.filter(element => element).join(' | '))
         }
         return [titles, item.amount, item.price, item.total]
       }))
