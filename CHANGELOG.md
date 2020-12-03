@@ -8,6 +8,12 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 Nothing at the moment
 
+## [2.9.0] - 2020-12-03
+
+### Added
+
+- Add option to exclude buyer info from order details
+
 ## [2.8.0] - 2020-10-01
 
 ### Added
@@ -147,7 +153,8 @@ Initial release
 
 [Keep a Changelog]: https://keepachangelog.com/en/1.0.0/
 [Semantic Versioning]: https://semver.org/spec/v2.0.0.html
-[Unreleased]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.8.0...master
+[Unreleased]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.9.0...master
+[2.9.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.8.0...2.9.0
 [2.8.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.7.0...2.8.0
 [2.7.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.6.1...2.7.0
 [2.6.1]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.6.0...2.6.1

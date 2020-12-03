@@ -19,6 +19,7 @@
 (() => {
   document.addEventListener('DOMContentLoaded', () => {
     restorePageSize()
+    restoreBuyerFromOrder()
     restoreBuyerExtraInfo()
   })
 
@@ -35,6 +36,22 @@
     browser.storage.sync.get('pageSize').then((result) => {
       let pageSize = result.hasOwnProperty('pageSize') ? result.pageSize : 'A4'
       document.querySelector(pageSizeSelector).value = pageSize
+    })
+  }
+
+  const buyerFromOrderSelector = 'input[name=buyer-from-order]'
+  document.querySelector(buyerFromOrderSelector).addEventListener('change', storeBuyerFromOrder)
+
+  function storeBuyerFromOrder() {
+    browser.storage.sync.set({
+      buyerFromOrder: document.querySelector(buyerFromOrderSelector).checked
+    })
+  }
+
+  function restoreBuyerFromOrder() {
+    browser.storage.sync.get('buyerFromOrder').then((result) => {
+      let buyerFromOrder = result.hasOwnProperty('buyerFromOrder') ? result.buyerFromOrder : true
+      document.querySelector(buyerFromOrderSelector).checked = buyerFromOrder
     })
   }
 

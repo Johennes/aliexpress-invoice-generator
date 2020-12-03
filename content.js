@@ -76,16 +76,17 @@
   async function storePdf() {
     clearMessages()
     let settings = await loadSettings()
-    let context = getContext()
+    let context = getContext(settings)
     let chunks = await createPdf(settings, context)
     let port = browser.runtime.connect()
     port.postMessage({ action: 'store-pdf', chunks: chunks, date: context.order.date, number: context.order.number })
   }
 
   async function loadSettings() {
-    let result = await browser.storage.sync.get(['pageSize', 'buyerExtraInfo'])
+    let result = await browser.storage.sync.get(['pageSize', 'buyerFromOrder', 'buyerExtraInfo'])
     return {
       pageSize: result.hasOwnProperty('pageSize') ? result.pageSize : 'A4',
+      buyerFromOrder: result.hasOwnProperty('buyerFromOrder') ? result.buyerFromOrder : true,
       buyerExtraInfo: result.hasOwnProperty('buyerExtraInfo') ? result.buyerExtraInfo : ''
     }
   }
@@ -146,7 +147,7 @@
 
   // Invoice Data Extraction
 
-  function getContext() {
+  function getContext(settings) {
     let total = getTotal()
     let tax = getTax(total)
     return {
@@ -159,12 +160,12 @@
         url: getStoreUrl()
       },
       buyer: {
-        name: getBuyerName(),
-        street1: getBuyerStreet1(),
-        street2: getBuyerStreet2(),
-        zip: getBuyerZip(),
-        city: getBuyerCity(),
-        region: getBuyerRegion()
+        name: settings.buyerFromOrder ? getBuyerName() : null,
+        street1: settings.buyerFromOrder ? getBuyerStreet1() : null,
+        street2: settings.buyerFromOrder ? getBuyerStreet2() : null,
+        zip: settings.buyerFromOrder ? getBuyerZip() : null,
+        city: settings.buyerFromOrder ? getBuyerCity() : null,
+        region: settings.buyerFromOrder ? getBuyerRegion() : null
       },
       logistics: {
         shippingCompany: getShippingCompany(),
@@ -695,32 +696,37 @@
 
     builder.pushYOffset(yMax)
 
-    builder.setFont(boldFont)
-    builder.setFontSize(baseFontSize * 1.15)
-    builder.addText('Buyer', 0, 18, {
-      align: 'right'
-    })
-
-    builder.pushYOffset()
-
     let buyerLines = [
       context.buyer.name,
       context.buyer.street1,
       context.buyer.street2,
-      `${context.buyer.zip} ${context.buyer.city}`,
+      [context.buyer.zip, context.buyer.city].filter(element => element).join(' '),
       context.buyer.region].filter(element => element).join('\n')
 
     if (settings.buyerExtraInfo) {
-      buyerLines += `\n${settings.buyerExtraInfo}`
+      if (buyerLines) {
+        buyerLines += '\n'
+      }
+      buyerLines += settings.buyerExtraInfo
     }
 
-    builder.setFont(regularFont)
-    builder.setFontSize(baseFontSize)
-    builder.addText(buyerLines, 0, 3, {
-      align: 'right'
-    })
+    if (buyerLines) {
+      builder.setFont(boldFont)
+      builder.setFontSize(baseFontSize * 1.15)
+      builder.addText('Buyer', 0, 18, {
+        align: 'right'
+      })
 
-    yMax = builder.popYOffset()
+      builder.pushYOffset()
+
+      builder.setFont(regularFont)
+      builder.setFontSize(baseFontSize)
+      builder.addText(buyerLines, 0, 3, {
+        align: 'right'
+      })
+
+      yMax = builder.popYOffset()
+    }
 
     builder.setFont(boldFont)
     builder.setFontSize(baseFontSize * 1.15)
