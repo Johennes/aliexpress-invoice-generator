@@ -676,7 +676,7 @@
 
     builder.setFont(fonts.bold)
     builder.setFontSize(baseFontSize * 1.5)
-    builder.addText('Invoice', 0, 3, {
+    builder.addText(browser.i18n.getMessage("invoice"), 0, 3, {
       align: 'left'
     })
 
@@ -684,7 +684,8 @@
 
     builder.setFont(fonts.regular)
     builder.setFontSize(baseFontSize)
-    builder.addText(`Invoice No. ${context.order.number}\n${context.order.date}`, 0, 0, {
+    const invoiceNo = browser.i18n.getMessage("invoiceNo", context.order.number)
+    builder.addText(`${invoiceNo}\n${context.order.date}`, 0, 0, {
       align: 'right'
     })
 
@@ -707,7 +708,7 @@
     if (buyerLines) {
       builder.setFont(fonts.bold)
       builder.setFontSize(baseFontSize * 1.15)
-      builder.addText('Buyer', 0, 18, {
+      builder.addText(browser.i18n.getMessage("buyer"), 0, 18, {
         align: 'right'
       })
 
@@ -724,7 +725,7 @@
 
     builder.setFont(fonts.bold)
     builder.setFontSize(baseFontSize * 1.15)
-    builder.addText('Store', 0, 18, {
+    builder.addText(browser.i18n.getMessage("store"), 0, 18, {
       align: 'left'
     })
 
@@ -748,13 +749,18 @@
 
     builder.setFont(fonts.bold)
     builder.setFontSize(baseFontSize * 1.15)
-    builder.addText('Order Details', 0, 18, {
+    builder.addText(browser.i18n.getMessage("orderDetails"), 0, 18, {
       align: 'left'
     })
 
     builder.pushYOffset()
 
-    let itemRows = [["Article", "Amount", "Price", "Total"]].concat(
+    let itemRows = [[
+      browser.i18n.getMessage("itemName"),
+      browser.i18n.getMessage("itemAmount"),
+      browser.i18n.getMessage("itemPrice"),
+      browser.i18n.getMessage("itemTotal")
+    ]].concat(
       context.items.map(item => {
         let titles = [item.title]
         if (item.specs) {
@@ -791,12 +797,15 @@
 
     builder.pushYOffset()
 
-    let totalRows = [["Shipping", context.shipping], ["Total", context.total]]
+    let totalRows = [
+      [browser.i18n.getMessage("shipping"), context.shipping],
+      [browser.i18n.getMessage("total"), context.total]
+    ]
     if (context.tax) {
-      totalRows.splice(1, 0, ["Tax / VAT", context.tax])
+      totalRows.splice(1, 0, [browser.i18n.getMessage("tax"), context.tax])
     }
     if (context.discount) {
-      totalRows.splice(1, 0, ["Discount", `- ${context.discount}`])
+      totalRows.splice(1, 0, [browser.i18n.getMessage("discount"), `- ${context.discount}`])
     }
 
     builder.addTable(totalRows, 9, 6, 6, 0,
@@ -820,7 +829,7 @@
     if (context.payment && context.payment.length) {
       builder.setFont(fonts.bold)
       builder.setFontSize(baseFontSize * 1.15)
-      builder.addText('Payment', 0, 18, {
+      builder.addText(browser.i18n.getMessage("payment"), 0, 18, {
         align: 'left'
       })
 
@@ -850,7 +859,7 @@
     if (context.logistics.shippingCompany || context.logistics.trackingNumber) {
       builder.setFont(fonts.bold)
       builder.setFontSize(baseFontSize * 1.15)
-      builder.addText('Logistics', 0, 18, {
+      builder.addText(browser.i18n.getMessage("logistics"), 0, 18, {
         align: 'left'
       })
 
@@ -859,7 +868,7 @@
       if (context.logistics.shippingCompany) {
         builder.setFont(fonts.regular)
         builder.setFontSize(baseFontSize)
-        builder.addText(`Shipping company: ${context.logistics.shippingCompany}`, 0, 3, {
+        builder.addText(browser.i18n.getMessage("shippingCompany", context.logistics.shippingCompany), 0, 3, {
           align: 'left'
         })
 
@@ -869,7 +878,7 @@
       if (context.logistics.trackingNumber) {
         builder.setFont(fonts.regular)
         builder.setFontSize(baseFontSize)
-        builder.addText(`Tracking number: ${context.logistics.trackingNumber}`, 0, 3, {
+        builder.addText(browser.i18n.getMessage("trackingNumber", context.logistics.trackingNumber), 0, 3, {
           align: 'left'
         })
 
@@ -880,14 +889,16 @@
     if (context.refundedItems && context.refundedItems.length) {
       builder.setFont(fonts.bold)
       builder.setFontSize(baseFontSize * 1.15)
-      builder.addText('Refund Information', 0, 18, {
+      builder.addText(browser.i18n.getMessage("refundInformation"), 0, 18, {
         align: 'left'
       })
 
       builder.pushYOffset()
 
-      let refundedItemRows = [["Article", "Refund"]].concat(
-        context.refundedItems.map(item => [item.title, item.total]))
+      let refundedItemRows = [[
+        browser.i18n.getMessage("itemName"),
+        browser.i18n.getMessage("itemRefund")
+      ]].concat(context.refundedItems.map(item => [item.title, item.total]))
 
       builder.addTable(refundedItemRows, 9, 6, 6, 0,
         (i) => {
@@ -914,7 +925,7 @@
 
     builder.setFont(fonts.regular)
     builder.setFontSize(baseFontSize)
-    builder.addText("Due to currency conversions the addition of all line items might be different from the listed total price.", 0, 18, {
+    builder.addText(browser.i18n.getMessage("disclaimer"), 0, 18, {
       align: 'left',
       oblique: true
     })
