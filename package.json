@@ -1,0 +1,18 @@
+{
+  "name": "aliexpress-invoice-generator",
+  "version": "2.9.0",
+  "description": "Browser extension for generating PDF invoices from AliExpress order detail websites",
+  "webExt": {
+    "sourceDir": "."
+  },
+  "dependencies": {
+    "web-ext": "^6.0.0",
+    "webextension-polyfill": "^0.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Johannes Marbach",
+  "license": "GPL-3.0-or-later"
+}
