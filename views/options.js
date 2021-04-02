@@ -19,6 +19,7 @@
 (() => {
   document.addEventListener('DOMContentLoaded', () => {
     restorePageSize()
+    restoreFont()
     restoreBuyerFromOrder()
     restoreBuyerExtraInfo()
   })
@@ -36,6 +37,22 @@
     browser.storage.sync.get('pageSize').then((result) => {
       let pageSize = result.hasOwnProperty('pageSize') ? result.pageSize : 'A4'
       document.querySelector(pageSizeSelector).value = pageSize
+    })
+  }
+
+  const fontSelector = 'select[name=font]'
+  document.querySelector(fontSelector).addEventListener('change', storeFont)
+
+  function storeFont() {
+    browser.storage.sync.set({
+      font: document.querySelector(fontSelector).value
+    })
+  }
+
+  function restoreFont() {
+    browser.storage.sync.get('font').then((result) => {
+      let font = result.hasOwnProperty('font') ? result.font : 'droid-sans'
+      document.querySelector(fontSelector).value = font
     })
   }
 

@@ -83,9 +83,10 @@
   }
 
   async function loadSettings() {
-    let result = await browser.storage.sync.get(['pageSize', 'buyerFromOrder', 'buyerExtraInfo'])
+    let result = await browser.storage.sync.get(['pageSize', 'font', 'buyerFromOrder', 'buyerExtraInfo'])
     return {
       pageSize: result.hasOwnProperty('pageSize') ? result.pageSize : 'A4',
+      font: result.hasOwnProperty('font') ? result.font : 'droid-sans',
       buyerFromOrder: result.hasOwnProperty('buyerFromOrder') ? result.buyerFromOrder : true,
       buyerExtraInfo: result.hasOwnProperty('buyerExtraInfo') ? result.buyerExtraInfo : ''
     }
@@ -663,16 +664,9 @@
   // Invoice PDF Creation
 
   async function createPdf(settings, context) {
-    let lightFont = `DroidSansFallback`
-    let regularFont = `DroidSansFallback`
-    let boldFont = `DroidSans-Bold`
-    let baseFontSize = 10
-
-    let builder = new PdfBuilder(settings.pageSize, 72)
-
-    builder.registerFont(lightFont, await getFile(`fonts/${lightFont}.ttf`))
-    builder.registerFont(regularFont, await getFile(`fonts/${regularFont}.ttf`))
-    builder.registerFont(boldFont, await getFile(`fonts/${boldFont}.ttf`))
+    const builder = new PdfBuilder(settings.pageSize, 72)
+    const fonts = await loadAndRegisterFonts(builder, settings)
+    const baseFontSize = 10
 
     builder.addImage(await getFile("aliexpress.png"), 0, 0, {
       width: 100
@@ -680,7 +674,7 @@
 
     builder.pushYOffset()
 
-    builder.setFont(boldFont)
+    builder.setFont(fonts.bold)
     builder.setFontSize(baseFontSize * 1.5)
     builder.addText('Invoice', 0, 3, {
       align: 'left'
@@ -688,7 +682,7 @@
 
     let yMax = builder.popYOffset()
 
-    builder.setFont(regularFont)
+    builder.setFont(fonts.regular)
     builder.setFontSize(baseFontSize)
     builder.addText(`Invoice No. ${context.order.number}\n${context.order.date}`, 0, 0, {
       align: 'right'
@@ -711,7 +705,7 @@
     }
 
     if (buyerLines) {
-      builder.setFont(boldFont)
+      builder.setFont(fonts.bold)
       builder.setFontSize(baseFontSize * 1.15)
       builder.addText('Buyer', 0, 18, {
         align: 'right'
@@ -719,7 +713,7 @@
 
       builder.pushYOffset()
 
-      builder.setFont(regularFont)
+      builder.setFont(fonts.regular)
       builder.setFontSize(baseFontSize)
       builder.addText(buyerLines, 0, 3, {
         align: 'right'
@@ -728,7 +722,7 @@
       yMax = builder.popYOffset()
     }
 
-    builder.setFont(boldFont)
+    builder.setFont(fonts.bold)
     builder.setFontSize(baseFontSize * 1.15)
     builder.addText('Store', 0, 18, {
       align: 'left'
@@ -736,7 +730,7 @@
 
     builder.pushYOffset()
 
-    builder.setFont(regularFont)
+    builder.setFont(fonts.regular)
     builder.setFontSize(baseFontSize)
     builder.addText(context.store.name, 0, 3, {
       align: 'left'
@@ -752,7 +746,7 @@
 
     builder.pushYOffset(yMax)
 
-    builder.setFont(boldFont)
+    builder.setFont(fonts.bold)
     builder.setFontSize(baseFontSize * 1.15)
     builder.addText('Order Details', 0, 18, {
       align: 'left'
@@ -774,7 +768,7 @@
         return i === 1 || i === itemRows.length
       },
       (i, j, k) => {
-        return i === 0 ? boldFont : j === 0 && k > 0 ? lightFont : regularFont
+        return i === 0 ? fonts.bold : j === 0 && k > 0 ? fonts.light : fonts.regular
       },
       (i, j, k) => {
         return j === 0 && k > 0 ? baseFontSize * 0.8 : baseFontSize
@@ -810,7 +804,7 @@
         return false
       },
       (i, j, k) => {
-        return i === totalRows.length - 1 ? boldFont : regularFont
+        return i === totalRows.length - 1 ? fonts.bold : fonts.regular
       },
       (i, j, k) => {
         return baseFontSize
@@ -824,7 +818,7 @@
     builder.pushYOffset()
 
     if (context.payment && context.payment.length) {
-      builder.setFont(boldFont)
+      builder.setFont(fonts.bold)
       builder.setFontSize(baseFontSize * 1.15)
       builder.addText('Payment', 0, 18, {
         align: 'left'
@@ -839,7 +833,7 @@
           return false
         },
         (i, j, k) => {
-          return regularFont
+          return fonts.regular
         },
         (i, j, k) => {
           return baseFontSize
@@ -854,7 +848,7 @@
     }
 
     if (context.logistics.shippingCompany || context.logistics.trackingNumber) {
-      builder.setFont(boldFont)
+      builder.setFont(fonts.bold)
       builder.setFontSize(baseFontSize * 1.15)
       builder.addText('Logistics', 0, 18, {
         align: 'left'
@@ -863,7 +857,7 @@
       builder.pushYOffset()
 
       if (context.logistics.shippingCompany) {
-        builder.setFont(regularFont)
+        builder.setFont(fonts.regular)
         builder.setFontSize(baseFontSize)
         builder.addText(`Shipping company: ${context.logistics.shippingCompany}`, 0, 3, {
           align: 'left'
@@ -873,7 +867,7 @@
       }
 
       if (context.logistics.trackingNumber) {
-        builder.setFont(regularFont)
+        builder.setFont(fonts.regular)
         builder.setFontSize(baseFontSize)
         builder.addText(`Tracking number: ${context.logistics.trackingNumber}`, 0, 3, {
           align: 'left'
@@ -884,7 +878,7 @@
     }
 
     if (context.refundedItems && context.refundedItems.length) {
-      builder.setFont(boldFont)
+      builder.setFont(fonts.bold)
       builder.setFontSize(baseFontSize * 1.15)
       builder.addText('Refund Information', 0, 18, {
         align: 'left'
@@ -900,7 +894,7 @@
           return i === 1
         },
         (i, j, k) => {
-          return i === 0 ? boldFont : regularFont
+          return i === 0 ? fonts.bold : fonts.regular
         },
         (i, j, k) => {
           return baseFontSize
@@ -918,7 +912,7 @@
       builder.pushYOffset()
     }
 
-    builder.setFont(regularFont)
+    builder.setFont(fonts.regular)
     builder.setFontSize(baseFontSize)
     builder.addText("Due to currency conversions the addition of all line items might be different from the listed total price.", 0, 18, {
       align: 'left',
@@ -926,6 +920,27 @@
     })
 
     return await builder.build()
+  }
+
+  async function loadAndRegisterFonts(builder, settings) {
+    let light, regular, bold;
+    if (settings.font === 'droid-sans') {
+      light = 'DroidSansFallback'
+      regular = 'DroidSansFallback'
+      bold = 'DroidSans-Bold'
+      builder.registerFont(light, await getFile(`fonts/${light}.ttf`))
+      builder.registerFont(regular, await getFile(`fonts/${regular}.ttf`))
+      builder.registerFont(bold, await getFile(`fonts/${bold}.ttf`))
+    } else if (settings.font === 'helvetica') {
+      light = 'Helvetica'
+      regular = 'Helvetica'
+      bold = 'Helvetica-Bold'
+    } else if (settings.font === 'times') {
+      light = 'Times-Roman'
+      regular = 'Times-Roman'
+      bold = 'Times-Bold'
+    }
+    return {light, regular, bold}
   }
 
   async function getFile(path) {

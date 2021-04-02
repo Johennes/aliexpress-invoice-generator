@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
-Nothing at the moment
+### Added
+
+- Add option to select font (Droid Sans, Helvetica or Times)
 
 ## [2.9.0] - 2020-12-03
 
