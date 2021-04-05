@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
-Nothing at the moment
+### Changed
+
+- Pick invoice language based on browser locale (currently supported languages: English, German, Italian)
 
 ## [2.10.0] - 2021-04-02
 
