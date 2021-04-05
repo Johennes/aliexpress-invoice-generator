@@ -7,6 +7,12 @@ form and so I ended up creating this extension.
 
 The PDF generation is based on [PDFKit].
 
+**1,200 daily users** (on Firefox) and counting!
+
+![](screenshots/statistics.png "Firefox user statistics")
+
+A few screenshots:
+
 ![](screenshots/onboarding-1.png "Two ways to create the invoice")
 
 ![](screenshots/onboarding-2.png "Generated PDF")
