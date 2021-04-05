@@ -1,0 +1,100 @@
+{
+  "invoice": {
+    "message": "Fattura",
+    "description": "Title of the invoice document"
+  },
+  "invoiceNo": {
+    "message": "Fattura N. $NUMBER$",
+    "description": "The invoice / order number",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "123456789"
+      }
+    }
+  },
+  "buyer": {
+    "message": "Acquirente",
+    "description": "Title for buyer section"
+  },
+  "store": {
+    "message": "Negozio",
+    "description": "Title for store / seller section"
+  },
+  "orderDetails": {
+    "message": "Altri Dettagli",
+    "description": "Title for order details section"
+  },
+  "itemName": {
+    "message": "Articolo",
+    "description": "Title for item name column"
+  },
+  "itemAmount": {
+    "message": "Quantità",
+    "description": "Title for item amount column"
+  },
+  "itemPrice": {
+    "message": "Prezzo",
+    "description": "Title for item price column"
+  },
+  "itemTotal": {
+    "message": "Totale",
+    "description": "Title for item total column"
+  },
+  "itemRefund": {
+    "message": "Rimborso",
+    "description": "Title for item refund column"
+  },
+  "shipping": {
+    "message": "Spedizione",
+    "description": "Label for shipping fees"
+  },
+  "total": {
+    "message": "Totale",
+    "description": "Title for total price"
+  },
+  "tax": {
+    "message": "Tasse / IVA",
+    "description": "Title for taxes / VAT"
+  },
+  "discount": {
+    "message": "Sconto",
+    "description": "Title for order discount / coupon"
+  },
+  "payment": {
+    "message": "Pagamento",
+    "description": "Title for payment details section"
+  },
+  "logistics": {
+    "message": "Logistica",
+    "description": "Title for logistics details section"
+  },
+  "shippingCompany": {
+    "message": "Compagnia di spedizione : $COMPANY$",
+    "description": "The shipping company",
+    "placeholders": {
+      "company": {
+        "content": "$1",
+        "example": "Foo Express"
+      }
+    }
+  },
+  "trackingNumber": {
+    "message": "Numero di tracciamento: $NUMBER$",
+    "description": "The package tracking number",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "123456789"
+      }
+    }
+  },
+  "refundInformation": {
+    "message": "Informazioni di rimborso",
+    "description": "Title for refund details section"
+  },
+  "disclaimer": {
+    "message": "A causa delle conversioni di valuta, la somma di tutte le voci potrebbe essere diversa dal prezzo totale indicato",
+    "description": "Currency conversion inaccuracy disclaimer"
+  }
+}
