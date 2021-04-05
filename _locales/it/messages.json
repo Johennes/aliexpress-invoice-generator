@@ -30,7 +30,7 @@
     "description": "Title for item name column"
   },
   "itemAmount": {
-    "message": "Importo",
+    "message": "Quantità",
     "description": "Title for item amount column"
   },
   "itemPrice": {
