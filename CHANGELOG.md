@@ -6,9 +6,13 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
+Nothing at the moment
+
+## [3.0.0] - 2021-04-27
+
 ### Changed
 
-- Pick invoice language based on browser locale (currently supported languages: English, German, Italian)
+- Pick invoice language based on browser locale, currently supported languages: English, German, Italian (thanks @dentex)
 
 ## [2.10.0] - 2021-04-02
 
@@ -161,7 +165,8 @@ Initial release
 
 [Keep a Changelog]: https://keepachangelog.com/en/1.0.0/
 [Semantic Versioning]: https://semver.org/spec/v2.0.0.html
-[Unreleased]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.10.0...master
+[Unreleased]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/3.0.0...master
+[3.0.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.10.0...3.0.0
 [2.10.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.9.0...2.10.0
 [2.9.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.8.0...2.9.0
 [2.8.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.7.0...2.8.0
