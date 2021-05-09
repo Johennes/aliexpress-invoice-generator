@@ -6,7 +6,9 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
-Nothing at the moment
+### Added
+
+- Add Spanish translations (thanks @Ronny)
 
 ## [3.0.0] - 2021-04-27
 
