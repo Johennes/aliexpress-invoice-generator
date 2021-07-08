@@ -6,9 +6,17 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
+Nothing at the moment
+
+## [3.1.0] - 2021-07-08
+
 ### Added
 
 - Add Spanish translations (thanks @Ronny)
+
+### Fixed
+
+- Correctly scrape taxes and total price on orders after 2021-07-01 (thanks @roadhousepc)
 
 ## [3.0.0] - 2021-04-27
 
@@ -167,7 +175,8 @@ Initial release
 
 [Keep a Changelog]: https://keepachangelog.com/en/1.0.0/
 [Semantic Versioning]: https://semver.org/spec/v2.0.0.html
-[Unreleased]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/3.0.0...master
+[Unreleased]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/3.1.0...master
+[3.1.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/3.0.0...3.1.0
 [3.0.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.10.0...3.0.0
 [2.10.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.9.0...2.10.0
 [2.9.0]: https://nosuchdomain.mooo.com/git/doc/aliexpress-invoice-generator/compare/2.8.0...2.9.0
