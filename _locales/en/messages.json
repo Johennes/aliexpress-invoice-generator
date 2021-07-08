@@ -41,9 +41,17 @@
     "message": "Total",
     "description": "Title for item total column"
   },
+  "itemTax": {
+    "message": "Tax / VAT",
+    "description": "Title for item taxes / VAT"
+  },
   "itemRefund": {
     "message": "Refund",
     "description": "Title for item refund column"
+  },
+  "productTotal": {
+    "message": "Products",
+    "description": "Label for product total (without taxes and shipping)"
   },
   "shipping": {
     "message": "Shipping",

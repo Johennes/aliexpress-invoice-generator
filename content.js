@@ -173,6 +173,7 @@
         trackingNumber: getTrackingNumber()
       },
       items: getItems(),
+      productTotal: getProductTotal(),
       shipping: getShippingTotal(),
       discount: getDiscount(),
       tax: tax,
@@ -289,13 +290,16 @@
 
   function getItems() {
     return forAllElements(document, 'table#TP_ProductTable tr.order-bd', 'items', SEVERITY_ERROR, (row, index) => {
+      const total = getItemTotal(row);
+      const tax = getItemTax(row, total);
       return {
         title: getItemTitle(row),
         specs: getItemSpecs(row),
         image: getItemImage(row),
         amount: getItemAmount(row),
         price: getItemPrice(row),
-        total: getItemTotal(row)
+        total: total,
+        tax: tax
       }
     })
   }
@@ -324,7 +328,16 @@
   }
 
   function getItemTotal(row) {
-    return getText(row, 'td.amount', 'item total', SEVERITY_ERROR)
+    return getText(row, 'td.amount:not(.tax)', 'item total', SEVERITY_ERROR);
+  }
+
+  function getItemTax(row, price) {
+    return hasTax() ? getText(row, 'td.tax', 'item tax', SEVERITY_ERROR) : getZeroTax(price);
+  }
+
+  function getProductTotal() {
+    let element = getNthElement(document, 'div.final-price', 0, 'product total', SEVERITY_ERROR);
+    return element ? normalizePrice(element.textContent) : null;
   }
 
   function getShippingTotal() {
@@ -333,8 +346,13 @@
   }
 
   function getTotal() {
-    let element = getNthElement(document, 'div.final-price', 2, 'total', SEVERITY_ERROR);
+    // Invoices for orders after 2021-07-01 have an extra tax column
+    let element = getNthElement(document, 'div.final-price', hasTax() ? 3 : 2, 'total', SEVERITY_ERROR);
     return element ? normalizePrice(element.textContent) : null
+  }
+
+  function hasTax() {
+    return getElementCount(document, '.tax') > 0 || getElementCount(document, 'div.final-price') > 3;
   }
 
   function getDiscount() {
@@ -395,13 +413,23 @@
   }
 
   function getTax(price) {
+    if (hasTax()) {
+      let element = getNthElement(document, 'div.final-price', 2, 'tax', SEVERITY_ERROR);
+      return element ? normalizePrice(element.textContent) : null
+    } else {
+      // Invoices for orders before 2021-07-01 don't include any taxes
+      return getZeroTax(price);
+    }
+  }
+
+  function getZeroTax(price) {
     if (price.match(/\d+,\d+$/)) {
       return price.replace(/\d+,\d+$/, "0,00");
     }
     if (price.match(/\d+\.\d+$/)) {
       return price.replace(/\d+\.\d+$/, "0.00");
     }
-    return null;
+    return '--';
   }
 
   function forAllElements(parent, selector, description, severity, map) {
@@ -415,6 +443,11 @@
       result.push(map(elements[i], i));
     }
     return result;
+  }
+
+  function getElementCount(parent, selector) {
+    let elements = parent.querySelectorAll(selector);
+    return !elements ? 0 : elements.length;
   }
 
   function getNthElement(parent, selector, n, description, severity) {
@@ -759,6 +792,7 @@
       browser.i18n.getMessage("itemName"),
       browser.i18n.getMessage("itemAmount"),
       browser.i18n.getMessage("itemPrice"),
+      browser.i18n.getMessage("itemTax"),
       browser.i18n.getMessage("itemTotal")
     ]].concat(
       context.items.map(item => {
@@ -766,7 +800,7 @@
         if (item.specs) {
           titles.push(item.specs.filter(element => element).join(' | '))
         }
-        return [titles, item.amount, item.price, item.total]
+        return [titles, item.amount, item.price, item.tax, item.total]
       }))
 
     builder.addTable(itemRows, 9, 6, 6, 0,
@@ -798,6 +832,7 @@
     builder.pushYOffset()
 
     let totalRows = [
+      [browser.i18n.getMessage("productTotal"), context.productTotal],
       [browser.i18n.getMessage("shipping"), context.shipping],
       [browser.i18n.getMessage("total"), context.total]
     ]

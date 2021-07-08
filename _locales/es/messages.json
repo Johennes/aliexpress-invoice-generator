@@ -41,9 +41,17 @@
     "message": "Total",
     "description": "Title for item total column"
   },
+  "itemTax": {
+    "message": "IGIC",
+    "description": "Title for item taxes / VAT"
+  },
   "itemRefund": {
     "message": "Reembolso",
     "description": "Title for item refund column"
+  },
+  "productTotal": {
+    "message": "Productos",
+    "description": "Label for product total (without taxes and shipping)"
   },
   "shipping": {
     "message": "Gastos de envío",

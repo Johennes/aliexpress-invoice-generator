@@ -41,9 +41,17 @@
     "message": "Totale",
     "description": "Title for item total column"
   },
+  "itemTax": {
+    "message": "Tasse / IVA",
+    "description": "Title for item taxes / VAT"
+  },
   "itemRefund": {
     "message": "Rimborso",
     "description": "Title for item refund column"
+  },
+  "productTotal": {
+    "message": "Prodotti",
+    "description": "Label for product total (without taxes and shipping)"
   },
   "shipping": {
     "message": "Spedizione",
