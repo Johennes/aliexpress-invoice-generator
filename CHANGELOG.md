@@ -8,6 +8,13 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 Nothing at the moment
 
+## [3.1.1] - 2021-09-06
+
+### Fixed
+
+- Correctly display taxes for orders which only declare the total but no line item tax
+- Make sure all discounts, not just the first one, show on the invoice
+
 ## [3.1.0] - 2021-07-08
 
 ### Added
@@ -175,7 +182,8 @@ Initial release
 
 [Keep a Changelog]: https://keepachangelog.com/en/1.0.0/
 [Semantic Versioning]: https://semver.org/spec/v2.0.0.html
-[Unreleased]: https://github.com/Johennes/aliexpress-invoice-generator/compare/3.1.0...master
+[Unreleased]: https://github.com/Johennes/aliexpress-invoice-generator/compare/3.1.1...master
+[3.1.1]: https://github.com/Johennes/aliexpress-invoice-generator/compare/3.1.0...3.1.1
 [3.1.0]: https://github.com/Johennes/aliexpress-invoice-generator/compare/3.0.0...3.1.0
 [3.0.0]: https://github.com/Johennes/aliexpress-invoice-generator/compare/2.10.0...3.0.0
 [2.10.0]: https://github.com/Johennes/aliexpress-invoice-generator/compare/2.9.0...2.10.0

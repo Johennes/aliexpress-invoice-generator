@@ -149,8 +149,10 @@
   // Invoice Data Extraction
 
   function getContext(settings) {
-    let total = getTotal()
-    let tax = getTax(total)
+    const hasTax = getHasTax();
+    const hasTotalTaxOnly = getHasTotalTaxOnly(hasTax);
+    const total = getTotal(hasTax);
+    const tax = getTax(total, hasTax, hasTotalTaxOnly);
     return {
       order: {
         number: getOrderNumber(),
@@ -172,14 +174,15 @@
         shippingCompany: getShippingCompany(),
         trackingNumber: getTrackingNumber()
       },
-      items: getItems(),
+      items: getItems(hasTax),
       productTotal: getProductTotal(),
       shipping: getShippingTotal(),
       discount: getDiscount(),
       tax: tax,
       total: total,
       payment: getPayment(),
-      refundedItems: getRefundedItems()
+      refundedItems: getRefundedItems(),
+      hasTotalTaxOnly: hasTotalTaxOnly
     };
   }
 
@@ -288,10 +291,10 @@
     return text ? text.replace('\n', ', ') : null
   }
 
-  function getItems() {
+  function getItems(hasTax) {
     return forAllElements(document, 'table#TP_ProductTable tr.order-bd', 'items', SEVERITY_ERROR, (row, index) => {
       const total = getItemTotal(row);
-      const tax = getItemTax(row, total);
+      const tax = getItemTax(row, total, hasTax);
       return {
         title: getItemTitle(row),
         specs: getItemSpecs(row),
@@ -331,8 +334,8 @@
     return getText(row, 'td.amount:not(.tax)', 'item total', SEVERITY_ERROR);
   }
 
-  function getItemTax(row, price) {
-    return hasTax() ? getText(row, 'td.tax', 'item tax', SEVERITY_ERROR) : getZeroTax(price);
+  function getItemTax(row, price, hasTax) {
+    return hasTax ? getText(row, 'td.tax', 'item tax', SEVERITY_ERROR) : getZeroTax(price);
   }
 
   function getProductTotal() {
@@ -345,14 +348,19 @@
     return element ? normalizePrice(element.textContent) : null
   }
 
-  function getTotal() {
+  function getTotal(hasTax) {
     // Invoices for orders after 2021-07-01 have an extra tax column
-    let element = getNthElement(document, 'div.final-price', hasTax() ? 3 : 2, 'total', SEVERITY_ERROR);
+    let element = getNthElement(document, 'div.final-price', hasTax ? 3 : 2, 'total', SEVERITY_ERROR);
     return element ? normalizePrice(element.textContent) : null
   }
 
-  function hasTax() {
+  function getHasTax() {
     return getElementCount(document, '.tax') > 0 || getElementCount(document, 'div.final-price') > 3;
+  }
+
+  function getHasTotalTaxOnly(hasTax) {
+    // Some invoice layouts only have the total tax in a tooltip
+    return !hasTax && getElementCount(document, '.s-tax__tool') > 0;
   }
 
   function getDiscount() {
@@ -360,11 +368,14 @@
     if (!element) {
       return null;
     }
-    let lines = element.innerHTML.trim().split('<br');
-    if (lines.length < 2) {
-      return null;
+    let discount = [];
+    const lines = element.innerHTML.trim().split('<br');
+    for (let line of lines) {
+      if (line.match(/\d+[,.]\d+/)) {
+        discount.push(line.replace(/^[\/>\s]+/g, '').substring(4).trim());
+      }
     }
-    return lines[1].replace(/^[\/>\s]+/g, '').substring(4).trim();
+    return discount;
   }
 
   function getPayment() {
@@ -412,10 +423,14 @@
     return text ? text.substring(4) : null;
   }
 
-  function getTax(price) {
-    if (hasTax()) {
+  function getTax(price, hasTax, hasTotalTaxOnly) {
+    if (hasTax) {
       let element = getNthElement(document, 'div.final-price', 2, 'tax', SEVERITY_ERROR);
       return element ? normalizePrice(element.textContent) : null
+    } else if (hasTotalTaxOnly) {
+      const element = getElement(document, '.s-tax__tool', 'tax', SEVERITY_ERROR);
+      const displayTax = element.getAttribute('data-amountstr');
+      return displayTax;
     } else {
       // Invoices for orders before 2021-07-01 don't include any taxes
       return getZeroTax(price);
@@ -788,20 +803,29 @@
 
     builder.pushYOffset()
 
-    let itemRows = [[
+    let itemHeader = [
       browser.i18n.getMessage("itemName"),
       browser.i18n.getMessage("itemAmount"),
-      browser.i18n.getMessage("itemPrice"),
-      browser.i18n.getMessage("itemTax"),
-      browser.i18n.getMessage("itemTotal")
-    ]].concat(
+      browser.i18n.getMessage("itemPrice")
+    ];
+    if (!context.hasTotalTaxOnly) {
+      itemHeader.push(browser.i18n.getMessage("itemTax"))
+    }
+    itemHeader.push(browser.i18n.getMessage("itemTotal"))
+
+    let itemRows = [itemHeader].concat(
       context.items.map(item => {
         let titles = [item.title]
         if (item.specs) {
           titles.push(item.specs.filter(element => element).join(' | '))
         }
-        return [titles, item.amount, item.price, item.tax, item.total]
-      }))
+        let row = [titles, item.amount, item.price];
+        if (!context.hasTotalTaxOnly) {
+          row.push(item.tax);
+        }
+        row.push(item.total);
+        return row;
+      }));
 
     builder.addTable(itemRows, 9, 6, 6, 0,
       (i) => {
@@ -837,10 +861,12 @@
       [browser.i18n.getMessage("total"), context.total]
     ]
     if (context.tax) {
-      totalRows.splice(1, 0, [browser.i18n.getMessage("tax"), context.tax])
+      totalRows.splice(2, 0, [browser.i18n.getMessage("tax"), context.tax]);
     }
     if (context.discount) {
-      totalRows.splice(1, 0, [browser.i18n.getMessage("discount"), `- ${context.discount}`])
+      for (let i = context.discount.length - 1; i >= 0; --i) {
+        totalRows.splice(1, 0, [browser.i18n.getMessage("discount"), `- ${context.discount[i]}`]);
+      }
     }
 
     builder.addTable(totalRows, 9, 6, 6, 0,
