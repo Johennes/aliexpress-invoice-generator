@@ -485,7 +485,7 @@
 
   function getText(parent, selector, description, severity) {
     let element = getElement(parent, selector, description, severity);
-    return element ? element.textContent.trim() : null;
+    return element ? element.textContent.trim().replace(/\s\s+/g, ' ') : null;
   }
 
   function getAttribute(parent, selector, attribute, description, severity) {
