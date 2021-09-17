@@ -6,7 +6,10 @@ The format is based on [Keep a Changelog] and this project adheres to [Semantic 
 
 ## [Unreleased]
 
-Nothing at the moment
+### Fixed
+
+- Correctly handle taxes on orders above 150EUR (where AliExpress doesn't collect the taxes anymore)
+- Strip internal duplicate whitespace when scraping text
 
 ## [3.1.1] - 2021-09-06
 
