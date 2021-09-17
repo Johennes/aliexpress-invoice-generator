@@ -153,6 +153,7 @@
     const hasTotalTaxOnly = getHasTotalTaxOnly(hasTax);
     const total = getTotal(hasTax);
     const tax = getTax(total, hasTax, hasTotalTaxOnly);
+    const items = getItems(hasTax);
     return {
       order: {
         number: getOrderNumber(),
@@ -174,7 +175,7 @@
         shippingCompany: getShippingCompany(),
         trackingNumber: getTrackingNumber()
       },
-      items: getItems(hasTax),
+      items: items,
       productTotal: getProductTotal(),
       shipping: getShippingTotal(),
       discount: getDiscount(),
@@ -182,7 +183,8 @@
       total: total,
       payment: getPayment(),
       refundedItems: getRefundedItems(),
-      hasTotalTaxOnly: hasTotalTaxOnly
+      hasTotalTaxOnly: hasTotalTaxOnly,
+      hasItemTax: items.reduce((acc, cur) => acc || (cur.tax != null), false)
     };
   }
 
@@ -335,7 +337,10 @@
   }
 
   function getItemTax(row, price, hasTax) {
-    return hasTax ? getText(row, 'td.tax', 'item tax', SEVERITY_ERROR) : getZeroTax(price);
+    // For orders above 150EUR AliExpress doesn't collect the tax but instead shows a final adjustment for
+    // the tax to be collected later at customs. There will be no per-item taxes on the page in this case
+    // so we treat read errors as having no severity.
+    return hasTax ? getText(row, 'td.tax', 'item tax', SEVERITY_NONE) : getZeroTax(price);
   }
 
   function getProductTotal() {
@@ -808,7 +813,7 @@
       browser.i18n.getMessage("itemAmount"),
       browser.i18n.getMessage("itemPrice")
     ];
-    if (!context.hasTotalTaxOnly) {
+    if (!context.hasTotalTaxOnly && context.hasItemTax) {
       itemHeader.push(browser.i18n.getMessage("itemTax"))
     }
     itemHeader.push(browser.i18n.getMessage("itemTotal"))
@@ -820,8 +825,8 @@
           titles.push(item.specs.filter(element => element).join(' | '))
         }
         let row = [titles, item.amount, item.price];
-        if (!context.hasTotalTaxOnly) {
-          row.push(item.tax);
+        if (!context.hasTotalTaxOnly && context.hasItemTax) {
+          row.push(item.tax ? item.tax : "n/a");
         }
         row.push(item.total);
         return row;
