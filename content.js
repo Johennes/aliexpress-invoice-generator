@@ -184,6 +184,7 @@
       payment: getPayment(),
       refundedItems: getRefundedItems(),
       hasTotalTaxOnly: hasTotalTaxOnly,
+      isTaxCollectionAtCustomsBecauseOver150EUR: getIsTaxCollectionAtCustomsBecauseOver150EUR(),
       hasItemTax: items.reduce((acc, cur) => acc || (cur.tax != null), false)
     };
   }
@@ -366,6 +367,13 @@
   function getHasTotalTaxOnly(hasTax) {
     // Some invoice layouts only have the total tax in a tooltip
     return !hasTax && getElementCount(document, '.s-tax__tool') > 0;
+  }
+
+  function getIsTaxCollectionAtCustomsBecauseOver150EUR(hasTax) {
+    // For orders above 150EUR AliExpress doesn't collect the tax but instead shows a final adjustment for
+    // the tax to be collected later at customs.
+    const text = getText(document, '.s-tax__tool', 'tax tooltip text', SEVERITY_NONE);
+    return text ? text.match(/.*(EUR\s*150|150\s*EUR).*/) : false;
   }
 
   function getDiscount() {
@@ -866,7 +874,8 @@
       [browser.i18n.getMessage("total"), context.total]
     ]
     if (context.tax) {
-      totalRows.splice(2, 0, [browser.i18n.getMessage("tax"), context.tax]);
+      const tax = context.isTaxCollectionAtCustomsBecauseOver150EUR ? `- ${context.tax}` : context.tax;
+      totalRows.splice(2, 0, [browser.i18n.getMessage("tax"), tax]);
     }
     if (context.discount) {
       for (let i = context.discount.length - 1; i >= 0; --i) {
