@@ -21,7 +21,7 @@
 npm i
 
 if [[ ! -f pdfkit.standalone.js ]]; then
-    wget https://github.com/foliojs/pdfkit/releases/download/v0.10.0/pdfkit.standalone.js
+    wget https://github.com/foliojs/pdfkit/releases/download/v0.12.1/pdfkit.standalone.js
 fi
 
 cp -v node_modules/webextension-polyfill/dist/browser-polyfill.js .
