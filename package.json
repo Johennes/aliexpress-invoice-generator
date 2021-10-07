@@ -6,8 +6,8 @@
     "sourceDir": "."
   },
   "dependencies": {
-    "web-ext": "^6.0.0",
-    "webextension-polyfill": "^0.7.0"
+    "web-ext": "^6.4.0",
+    "webextension-polyfill": "^0.8.0"
   },
   "devDependencies": {},
   "scripts": {
