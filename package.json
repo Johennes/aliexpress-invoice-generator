@@ -11,7 +11,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "web-ext build --overwrite-dest --ignore-files '**/*.xcf' --ignore-files 'CHANGELOG.md' --ignore-files 'COPYING' --ignore-files 'README.md' --ignore-files 'package-lock.json' --ignore-files 'web-ext'",
+    "serve": "web-ext run --verbose --ignore-files '**/*.xcf' --ignore-files 'CHANGELOG.md' --ignore-files 'COPYING' --ignore-files 'README.md' --ignore-files 'package-lock.json' --ignore-files 'web-ext'"
   },
   "author": "Johannes Marbach",
   "license": "GPL-3.0-or-later"
