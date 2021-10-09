@@ -9,8 +9,12 @@
     "web-ext": "^6.4.0",
     "webextension-polyfill": "^0.8.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "shx": "^0.3.3",
+    "wget-improved": "^3.2.1"
+  },
   "scripts": {
+    "init": "shx --verbose cp node_modules/webextension-polyfill/dist/browser-polyfill.js . && nwget https://github.com/foliojs/pdfkit/releases/download/v0.12.1/pdfkit.standalone.js -O pdfkit.standalone.js",
     "build": "web-ext build --overwrite-dest --ignore-files '**/*.xcf' --ignore-files 'CHANGELOG.md' --ignore-files 'COPYING' --ignore-files 'README.md' --ignore-files 'package-lock.json' --ignore-files 'web-ext'",
     "serve": "web-ext run --verbose --ignore-files '**/*.xcf' --ignore-files 'CHANGELOG.md' --ignore-files 'COPYING' --ignore-files 'README.md' --ignore-files 'package-lock.json' --ignore-files 'web-ext'"
   },
