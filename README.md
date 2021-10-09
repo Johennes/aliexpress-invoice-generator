@@ -34,7 +34,15 @@ or from the [Chrome Web Store].
 ## Running (from Code)
 
 For development and testing you can run the extension from code in an isolated browser
-instance through `./web-ext run`.
+instance using the following commands:
+1. Initialize the plugin (only once):
+```
+npm install
+npm run init
+```
+
+2. Build or serve the plugin using the following commands:
+`npm run serve` or `npm run build`.
 
 ## License
 
